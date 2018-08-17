@@ -1,0 +1,533 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="JSLee&#39;s Blog">
+    <title>Yeoman global install error - JSLee&#39;s Blog</title>
+    <meta name="author" content="JSLee">
+    
+    
+        <link rel="icon" href="https://j-s-lee.github.io/assets/images/favicons/favicon.ico">
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"JSLee","sameAs":[],"image":"blog_profile.jpg"},"articleBody":"Hyperledger composer 개발 환경 설정 중 발생한 에러들을 정리해보았습니다.\n\nYeoman 설치1$ npm install -g yo\n1. global installation을 위한 NPM default directory 생성우선 Permission 문제에 대한 문서 NPM docs - getting-started - fixing-npm-permissions 를 참고하여 npm의 Default Directory를 수정합니다.\n\nglobal installation을 위한 디렉토리 생성\n\n1$ mkdir ~/.npm-global\n\n디렉토리 경로를 npm config에  세팅\n\n12$ npm config set prefix '~/.npm-global'$ npm config get prefix # config prefix 세팅이 잘 되었는지 확인\n\n환경변수 설정\n\n1$ vi ~/.profile # .profile 수정(사용하는 에디터에 따라 명령어가 다를 수 있다)\n1$ export PATH=~/.npm-global/bin:$PATH # 위에서 생성한 npm global install을 위한 dir경로\n.profile 수정 후에는 변경사항을 적용시켜야 합니다.\n1$ source ~/.profile\n2. 디렉토리 권한 수정1번의 과정을 거친 후에도 다시 npm install -g yo 실행 시 아래와 같은 오류가 발생했습니다.\n오류 내용이 길어서 전체 내용 확인이 필요한 경우 에러 내용에 명시된 로그/home/hyper/.npm/_logs/2018-08-17T02_14_30_188Z-debug.log를 확인합니다.\n\n에러 로그\n\n1234567891011121314151617181920212223npm WARN checkPermissions Missing write access to /home/hyper/.npm-global/lib/node_modules/yonpm WARN checkPermissions Missing write access to /home/hyper/.npm-global/lib/node_modules/yo/node_modulesnpm ERR! path /home/hyper/.npm-global/lib/node_modules/yonpm ERR! code EACCESnpm ERR! errno -13npm ERR! syscall accessnpm ERR! Error: EACCES: permission denied, access '/home/hyper/.npm-global/lib/node_modules/yo'npm ERR!  &#123; Error: EACCES: permission denied, access '/home/hyper/.npm-global/lib/node_modules/yo'npm ERR!   stack: 'Error: EACCES: permission denied, access \\'/home/hyper/.npm-global/lib/node_modules/yo\\'',npm ERR!   errno: -13,npm ERR!   code: 'EACCES',npm ERR!   syscall: 'access',npm ERR!   path: '/home/hyper/.npm-global/lib/node_modules/yo' &#125;npm ERR!npm ERR! The operation was rejected by your operating system.npm ERR! It is likely you do not have the permissions to access this file as the current usernpm ERR!npm ERR! If you believe this might be a permissions issue, please double-check thenpm ERR! permissions of the file and its containing directories, or try runningnpm ERR! the command again as root/Administrator (though this is not recommended).npm ERR! A complete log of this run can be found in:npm ERR!     /home/hyper/.npm/_logs/2018-08-17T02_14_30_188Z-debug.log\n\n에러 로그에 명시된 access 오류가 발생하는 디렉토리 권한 수정\n\n123$ sudo chown -R hyper /home/hyper/.npm-global$ npm cache clean -fnpm WARN using --force I sure hope you know what you are doing.\n\nYeoman 설치\n\n12345678910111213141516171819202122$ npm install -g yo/home/hyper/.npm-global/bin/yo -&gt; /home/hyper/.npm-global/lib/node_modules/yo/lib/cli.js/home/hyper/.npm-global/bin/yo-complete -&gt; /home/hyper/.npm-global/lib/node_modules/yo/lib/completion/index.js&gt; yo@2.0.5 postinstall /home/hyper/.npm-global/lib/node_modules/yo&gt; yodoctorYeoman DoctorRunning sanity checks on your system✔ Global configuration file is valid✔ NODE_PATH matches the npm root✔ Node.js version✔ No .bowerrc file in home directory✔ No .yo-rc.json file in home directory✔ npm version✔ yo versionEverything looks all right!+ yo@2.0.5removed 1 package and updated 6 packages in 27.231shyper@DESKTOP-BOKQP6N:~$\n","dateCreated":"2018-08-17T11:16:57+09:00","dateModified":"2018-08-17T13:31:40+09:00","datePublished":"2018-08-17T11:16:57+09:00","description":"Hyperledger composer 개발 환경 설정 중 발생한 에러들을 정리해보았습니다.","headline":"Yeoman global install error","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://j-s-lee.github.io/2018/08/17/hyperledger-devtools-installing-error-log/"},"publisher":{"@type":"Organization","name":"JSLee","sameAs":[],"image":"blog_profile.jpg","logo":{"@type":"ImageObject","url":"blog_profile.jpg"}},"url":"https://j-s-lee.github.io/2018/08/17/hyperledger-devtools-installing-error-log/","keywords":"hyperledger, yeoman, npm"}</script>
+    <meta name="description" content="Hyperledger composer 개발 환경 설정 중 발생한 에러들을 정리해보았습니다.">
+<meta name="keywords" content="hyperledger,yeoman,npm">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Yeoman global install error">
+<meta property="og:url" content="https://j-s-lee.github.io/2018/08/17/hyperledger-devtools-installing-error-log/index.html">
+<meta property="og:site_name" content="JSLee&#39;s Blog">
+<meta property="og:description" content="Hyperledger composer 개발 환경 설정 중 발생한 에러들을 정리해보았습니다.">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-08-17T04:31:40.155Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Yeoman global install error">
+<meta name="twitter:description" content="Hyperledger composer 개발 환경 설정 중 발생한 에러들을 정리해보았습니다.">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://j-s-lee.github.io/assets/images/blog_profile.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/all.css">
+    <link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
+    <link rel="stylesheet" href="/assets/css/thumbs.css">
+    <link rel="stylesheet" href="/assets/css/tranquilpeak.css">
+    <!--STYLES END-->
+    
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">JSLee&#39;s Blog</a>
+    </div>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/blog_profile.jpg" alt="Author&#39;s picture"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/blog_profile.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">JSLee</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>Junior</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="Home"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                            title="Categories"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="Tags"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="Archives"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                            title="About"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            Yeoman global install error
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-08-17T11:16:57+09:00">
+	
+		    Aug 17, 2018
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/Note/">Note</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>Hyperledger composer 개발 환경 설정 중 발생한 에러들을 정리해보았습니다.</p>
+<a id="more"></a>
+<h2 id="Yeoman-설치"><a href="#Yeoman-설치" class="headerlink" title="Yeoman 설치"></a>Yeoman 설치</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g yo</span><br></pre></td></tr></table></figure>
+<h3 id="1-global-installation을-위한-NPM-default-directory-생성"><a href="#1-global-installation을-위한-NPM-default-directory-생성" class="headerlink" title="1. global installation을 위한 NPM default directory 생성"></a>1. global installation을 위한 NPM default directory 생성</h3><p>우선 Permission 문제에 대한 문서 <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions" target="_blank" rel="noopener">NPM docs - getting-started - fixing-npm-permissions</a> 를 참고하여 npm의 <code>Default Directory</code>를 수정합니다.</p>
+<ol>
+<li>global installation을 위한 디렉토리 생성</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir ~/.npm-global</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>디렉토리 경로를 <code>npm config</code>에  세팅</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm config <span class="built_in">set</span> prefix <span class="string">'~/.npm-global'</span></span><br><span class="line">$ npm config get prefix <span class="comment"># config prefix 세팅이 잘 되었는지 확인</span></span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>환경변수 설정</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vi ~/.profile <span class="comment"># .profile 수정(사용하는 에디터에 따라 명령어가 다를 수 있다)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">export</span> PATH=~/.npm-global/bin:<span class="variable">$PATH</span> <span class="comment"># 위에서 생성한 npm global install을 위한 dir경로</span></span><br></pre></td></tr></table></figure>
+<p><code>.profile</code> 수정 후에는 변경사항을 적용시켜야 합니다.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">source</span> ~/.profile</span><br></pre></td></tr></table></figure>
+<h3 id="2-디렉토리-권한-수정"><a href="#2-디렉토리-권한-수정" class="headerlink" title="2. 디렉토리 권한 수정"></a>2. 디렉토리 권한 수정</h3><p>1번의 과정을 거친 후에도 다시 <code>npm install -g yo</code> 실행 시 아래와 같은 오류가 발생했습니다.</p>
+<p>오류 내용이 길어서 전체 내용 확인이 필요한 경우 에러 내용에 명시된 로그<code>/home/hyper/.npm/_logs/2018-08-17T02_14_30_188Z-debug.log</code>를 확인합니다.</p>
+<ol>
+<li>에러 로그</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">npm WARN checkPermissions Missing write access to /home/hyper/.npm-global/lib/node_modules/yo</span><br><span class="line">npm WARN checkPermissions Missing write access to /home/hyper/.npm-global/lib/node_modules/yo/node_modules</span><br><span class="line">npm ERR! path /home/hyper/.npm-global/lib/node_modules/yo</span><br><span class="line">npm ERR! code EACCES</span><br><span class="line">npm ERR! errno -13</span><br><span class="line">npm ERR! syscall access</span><br><span class="line">npm ERR! Error: EACCES: permission denied, access <span class="string">'/home/hyper/.npm-global/lib/node_modules/yo'</span></span><br><span class="line">npm ERR!  &#123; Error: EACCES: permission denied, access <span class="string">'/home/hyper/.npm-global/lib/node_modules/yo'</span></span><br><span class="line">npm ERR!   stack: <span class="string">'Error: EACCES: permission denied, access \'</span>/home/hyper/.npm-global/lib/node_modules/yo\<span class="string">''</span>,</span><br><span class="line">npm ERR!   errno: -13,</span><br><span class="line">npm ERR!   code: <span class="string">'EACCES'</span>,</span><br><span class="line">npm ERR!   syscall: <span class="string">'access'</span>,</span><br><span class="line">npm ERR!   path: <span class="string">'/home/hyper/.npm-global/lib/node_modules/yo'</span> &#125;</span><br><span class="line">npm ERR!</span><br><span class="line">npm ERR! The operation was rejected by your operating system.</span><br><span class="line">npm ERR! It is likely you <span class="keyword">do</span> not have the permissions to access this file as the current user</span><br><span class="line">npm ERR!</span><br><span class="line">npm ERR! If you believe this might be a permissions issue, please double-check the</span><br><span class="line">npm ERR! permissions of the file and its containing directories, or try running</span><br><span class="line">npm ERR! the <span class="built_in">command</span> again as root/Administrator (though this is not recommended).</span><br><span class="line"></span><br><span class="line">npm ERR! A complete <span class="built_in">log</span> of this run can be found <span class="keyword">in</span>:</span><br><span class="line">npm ERR!     /home/hyper/.npm/_logs/2018-08-17T02_14_30_188Z-debug.log</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>에러 로그에 명시된 access 오류가 발생하는 디렉토리 권한 수정</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ sudo chown -R hyper /home/hyper/.npm-global</span><br><span class="line">$ npm cache clean -f</span><br><span class="line">npm WARN using --force I sure hope you know what you are doing.</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>Yeoman 설치</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g yo</span><br><span class="line">/home/hyper/.npm-global/bin/yo -&gt; /home/hyper/.npm-global/lib/node_modules/yo/lib/cli.js</span><br><span class="line">/home/hyper/.npm-global/bin/yo-complete -&gt; /home/hyper/.npm-global/lib/node_modules/yo/lib/completion/index.js</span><br><span class="line"></span><br><span class="line">&gt; yo@2.0.5 postinstall /home/hyper/.npm-global/lib/node_modules/yo</span><br><span class="line">&gt; yodoctor</span><br><span class="line"></span><br><span class="line">Yeoman Doctor</span><br><span class="line">Running sanity checks on your system</span><br><span class="line"></span><br><span class="line">✔ Global configuration file is valid</span><br><span class="line">✔ NODE_PATH matches the npm root</span><br><span class="line">✔ Node.js version</span><br><span class="line">✔ No .bowerrc file <span class="keyword">in</span> home directory</span><br><span class="line">✔ No .yo-rc.json file <span class="keyword">in</span> home directory</span><br><span class="line">✔ npm version</span><br><span class="line">✔ yo version</span><br><span class="line"></span><br><span class="line">Everything looks all right!</span><br><span class="line">+ yo@2.0.5</span><br><span class="line">removed 1 package and updated 6 packages <span class="keyword">in</span> 27.231s</span><br><span class="line">hyper@DESKTOP-BOKQP6N:~$</span><br></pre></td></tr></table></figure>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/hyperledger/">hyperledger</a> <a class="tag tag--primary tag--small t-link" href="/tags/npm/">npm</a> <a class="tag tag--primary tag--small t-link" href="/tags/yeoman/">yeoman</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/08/11/getting-started-hyperledger-with-windows10-wsl/" data-tooltip="Hyperledger 개발 환경 구축하기" aria-label="NEXT: Hyperledger 개발 환경 구축하기">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://j-s-lee.github.io/2018/08/17/hyperledger-devtools-installing-error-log/" title="Share on Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://j-s-lee.github.io/2018/08/17/hyperledger-devtools-installing-error-log/" title="Share on Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://j-s-lee.github.io/2018/08/17/hyperledger-devtools-installing-error-log/" title="Share on Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 JSLee. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/08/11/getting-started-hyperledger-with-windows10-wsl/" data-tooltip="Hyperledger 개발 환경 구축하기" aria-label="NEXT: Hyperledger 개발 환경 구축하기">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://j-s-lee.github.io/2018/08/17/hyperledger-devtools-installing-error-log/" title="Share on Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://j-s-lee.github.io/2018/08/17/hyperledger-devtools-installing-error-log/" title="Share on Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://j-s-lee.github.io/2018/08/17/hyperledger-devtools-installing-error-log/" title="Share on Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+    <i id="btn-close-shareoptions" class="fa fa-times"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://j-s-lee.github.io/2018/08/17/hyperledger-devtools-installing-error-log/">
+                    <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://j-s-lee.github.io/2018/08/17/hyperledger-devtools-installing-error-log/">
+                    <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://j-s-lee.github.io/2018/08/17/hyperledger-devtools-installing-error-log/">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/blog_profile.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">JSLee</h4>
+        
+            <div id="about-card-bio"><p>Junior</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>INTERPARK BIZMARKET</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                korea
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/prague.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/jquery.js"></script>
+<script src="/assets/js/jquery.fancybox.js"></script>
+<script src="/assets/js/thumbs.js"></script>
+<script src="/assets/js/tranquilpeak.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://j-s-lee.github.io/2018/08/17/hyperledger-devtools-installing-error-log/';
+                 
+                    this.page.identifier = '2018/08/17/hyperledger-devtools-installing-error-log/';
+                 
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'j-s-lee';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+    </body>
+</html>
