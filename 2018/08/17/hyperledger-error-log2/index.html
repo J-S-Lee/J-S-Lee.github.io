@@ -1,0 +1,514 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="JSLee&#39;s Blog">
+    <title>Docker &amp; Docker Compose 버전 업그레이드 - JSLee&#39;s Blog</title>
+    <meta name="author" content="JSLee">
+    
+    
+        <link rel="icon" href="https://j-s-lee.github.io/assets/images/favicons/favicon.ico">
+    
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"JSLee","sameAs":[],"image":"blog_profile.jpg"},"articleBody":"Hyperledger Composer Installing 가이드의 절차에 따라 Hyperledger Fabric을 설치한 후 ./startFabric.sh 스크립트를 실행하면 No such command: down 오류가 발생하는 경우가 있다.\n docker와 docker-compose 의 버전 문제였는데.. Hyperledger Composer &amp; Fabric 설치에 필요한 사전 요구사항에 표기된 버전을 참고하여 설치되어 있는 버전이 낮을 경우 업그레이드 해줘야 한다.\n\n검색해 보니  docker-compose의 경우 설치된 docker 버전에 따라 설치 가능한 latest 버전에 제한이 있는 것 같다.\n$ docker -v , $ docker-compose -v 명령을 통해 각각의 버전을 확인 후 최신 버전으로 업그레이드가 필요한 경우 다음의 커맨드를 이용하여 업그레이드가 가능하다.\n\ndocker upgrade\n\n12$ sudo apt-get update$ sudo apt-get upgrade\n\ndocker-compose upgrade\n\n12$ sudo apt-get -y install python-pip$ sudo pip install --upgrade pip setuptools docker-compose\n업그레이드 이후 다시 ./startFabric.sh 스크립트를 실행 시키고  docker ps 를 통해 컨테이너 상태를 확인 할 수 있었다.  \n","dateCreated":"2018-08-17T16:21:04+09:00","dateModified":"2018-08-20T15:27:56+09:00","datePublished":"2018-08-17T16:21:04+09:00","description":"Hyperledger Composer Installing 가이드의 절차에 따라 Hyperledger Fabric을 설치한 후 ./startFabric.sh 스크립트를 실행하면 No such command: down 오류가 발생하는 경우가 있다.\n docker와 docker-compose 의 버전 문제였는데.. Hyperledger Composer &amp; Fabric 설치에 필요한 사전 요구사항에 표기된 버전을 참고하여 설치되어 있는 버전이 낮을 경우 업그레이드 해줘야 한다.","headline":"Docker & Docker Compose 버전 업그레이드","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/"},"publisher":{"@type":"Organization","name":"JSLee","sameAs":[],"image":"blog_profile.jpg","logo":{"@type":"ImageObject","url":"blog_profile.jpg"}},"url":"https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/","keywords":"Hyperledger"}</script>
+    <meta name="description" content="Hyperledger Composer Installing 가이드의 절차에 따라 Hyperledger Fabric을 설치한 후 ./startFabric.sh 스크립트를 실행하면 No such command: down 오류가 발생하는 경우가 있다.  docker와 docker-compose 의 버전 문제였는데.. Hyperledger Composer &amp;amp;">
+<meta name="keywords" content="Hyperledger">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Docker &amp; Docker Compose 버전 업그레이드">
+<meta property="og:url" content="https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/index.html">
+<meta property="og:site_name" content="JSLee&#39;s Blog">
+<meta property="og:description" content="Hyperledger Composer Installing 가이드의 절차에 따라 Hyperledger Fabric을 설치한 후 ./startFabric.sh 스크립트를 실행하면 No such command: down 오류가 발생하는 경우가 있다.  docker와 docker-compose 의 버전 문제였는데.. Hyperledger Composer &amp;amp;">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-08-20T06:27:56.521Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker &amp; Docker Compose 버전 업그레이드">
+<meta name="twitter:description" content="Hyperledger Composer Installing 가이드의 절차에 따라 Hyperledger Fabric을 설치한 후 ./startFabric.sh 스크립트를 실행하면 No such command: down 오류가 발생하는 경우가 있다.  docker와 docker-compose 의 버전 문제였는데.. Hyperledger Composer &amp;amp;">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://j-s-lee.github.io/assets/images/blog_profile.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/all.css">
+    <link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
+    <link rel="stylesheet" href="/assets/css/thumbs.css">
+    <link rel="stylesheet" href="/assets/css/tranquilpeak.css">
+    <!--STYLES END-->
+    
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">JSLee&#39;s Blog</a>
+    </div>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/blog_profile.jpg" alt="Author&#39;s picture"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/blog_profile.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">JSLee</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>Junior</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="Home"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                            title="Categories"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="Tags"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="Archives"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                            title="About"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            Docker &amp; Docker Compose 버전 업그레이드
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-08-17T16:21:04+09:00">
+	
+		    Aug 17, 2018
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/Note/">Note</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p><a href="https://hyperledger.github.io/composer/latest/installing/development-tools.html" target="_blank" rel="noopener">Hyperledger Composer Installing 가이드</a>의 절차에 따라 Hyperledger Fabric을 설치한 후 <code>./startFabric.sh</code> 스크립트를 실행하면 <code>No such command: down</code> 오류가 발생하는 경우가 있다.</p>
+<p> <code>docker</code>와 <code>docker-compose</code> 의 버전 문제였는데.. <a href="https://j-s-lee.github.io/2018/08/11/getting-started-hyperledger-with-windows10-wsl/">Hyperledger Composer &amp; Fabric 설치에 필요한 사전 요구사항</a>에 표기된 버전을 참고하여 설치되어 있는 버전이 낮을 경우 업그레이드 해줘야 한다.</p>
+<a id="more"></a>
+<p>검색해 보니  <code>docker-compose</code>의 경우 설치된 <code>docker</code> 버전에 따라 설치 가능한 latest 버전에 제한이 있는 것 같다.</p>
+<p><code>$ docker -v</code> , <code>$ docker-compose -v</code> 명령을 통해 각각의 버전을 확인 후 최신 버전으로 업그레이드가 필요한 경우 다음의 커맨드를 이용하여 업그레이드가 가능하다.</p>
+<ul>
+<li>docker upgrade</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get update</span><br><span class="line">$ sudo apt-get upgrade</span><br></pre></td></tr></table></figure>
+<ul>
+<li>docker-compose upgrade</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get -y install python-pip</span><br><span class="line">$ sudo pip install --upgrade pip setuptools docker-compose</span><br></pre></td></tr></table></figure>
+<p>업그레이드 이후 다시 <code>./startFabric.sh</code> 스크립트를 실행 시키고  <code>docker ps</code> 를 통해 컨테이너 상태를 확인 할 수 있었다.  </p>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/Hyperledger/">Hyperledger</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/08/17/hyperledger-devtools-installing-error-log/" data-tooltip="NPM global install error with Yeoman" aria-label="NEXT: NPM global install error with Yeoman">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/" title="Share on Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/" title="Share on Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/" title="Share on Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 JSLee. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/08/17/hyperledger-devtools-installing-error-log/" data-tooltip="NPM global install error with Yeoman" aria-label="NEXT: NPM global install error with Yeoman">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/" title="Share on Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/" title="Share on Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/" title="Share on Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+    <i id="btn-close-shareoptions" class="fa fa-times"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/">
+                    <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/">
+                    <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/blog_profile.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">JSLee</h4>
+        
+            <div id="about-card-bio"><p>Junior</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>INTERPARK BIZMARKET</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                korea
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/prague.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/jquery.js"></script>
+<script src="/assets/js/jquery.fancybox.js"></script>
+<script src="/assets/js/thumbs.js"></script>
+<script src="/assets/js/tranquilpeak.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/';
+                 
+                    this.page.identifier = '2018/08/17/hyperledger-error-log2/';
+                 
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'j-s-lee';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+    </body>
+</html>
