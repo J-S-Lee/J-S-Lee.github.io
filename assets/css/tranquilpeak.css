@@ -3239,3 +3239,92 @@ figure.highlight,
   figure.highlight.yml .number,
   .codeblock.yml .number {
     color: #0086b3; }
+
+pre > code {
+  display: block;
+  background: white;
+  color: #4d4d4c;
+  font-family: Menlo, Monaco, Consolas, monospace;
+  line-height: 1.5;
+  border: 1px solid #ccc;
+  padding: 10px; }
+
+figure.highlight,
+.codeblock {
+  /* Tomorrow Theme */
+  /* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+  /* Original theme - https://github.com/chriskempson/tomorrow-theme */
+  /* http://jmblog.github.com/color-themes-for-google-code-highlightjs */ }
+  figure.highlight .tomorrow-comment, figure.highlight pre .comment, figure.highlight pre .title,
+  .codeblock .tomorrow-comment,
+  .codeblock pre .comment,
+  .codeblock pre .title {
+    color: #8e908c; }
+  figure.highlight .tomorrow-red, figure.highlight pre .variable, figure.highlight pre .attribute, figure.highlight pre .tag, figure.highlight pre .regexp, figure.highlight pre .ruby .constant, figure.highlight pre .xml .tag .title, figure.highlight pre .xml .pi, figure.highlight pre .xml .doctype, figure.highlight pre .html .doctype, figure.highlight pre .css .id, figure.highlight pre .css .class, figure.highlight pre .css .pseudo,
+  .codeblock .tomorrow-red,
+  .codeblock pre .variable,
+  .codeblock pre .attribute,
+  .codeblock pre .tag,
+  .codeblock pre .regexp,
+  .codeblock pre .ruby .constant,
+  .codeblock pre .xml .tag .title,
+  .codeblock pre .xml .pi,
+  .codeblock pre .xml .doctype,
+  .codeblock pre .html .doctype,
+  .codeblock pre .css .id,
+  .codeblock pre .css .class,
+  .codeblock pre .css .pseudo {
+    color: #c82829; }
+  figure.highlight .tomorrow-orange, figure.highlight pre .number, figure.highlight pre .preprocessor, figure.highlight pre .built_in, figure.highlight pre .literal, figure.highlight pre .params, figure.highlight pre .constant,
+  .codeblock .tomorrow-orange,
+  .codeblock pre .number,
+  .codeblock pre .preprocessor,
+  .codeblock pre .built_in,
+  .codeblock pre .literal,
+  .codeblock pre .params,
+  .codeblock pre .constant {
+    color: #f5871f; }
+  figure.highlight .tomorrow-yellow, figure.highlight pre .class, figure.highlight pre .ruby .class .title, figure.highlight pre .css .rules .attribute,
+  .codeblock .tomorrow-yellow,
+  .codeblock pre .class,
+  .codeblock pre .ruby .class .title,
+  .codeblock pre .css .rules .attribute {
+    color: #eab700; }
+  figure.highlight .tomorrow-green, figure.highlight pre .string, figure.highlight pre .value, figure.highlight pre .inheritance, figure.highlight pre .header, figure.highlight pre .ruby .symbol, figure.highlight pre .xml .cdata,
+  .codeblock .tomorrow-green,
+  .codeblock pre .string,
+  .codeblock pre .value,
+  .codeblock pre .inheritance,
+  .codeblock pre .header,
+  .codeblock pre .ruby .symbol,
+  .codeblock pre .xml .cdata {
+    color: #718c00; }
+  figure.highlight .tomorrow-aqua, figure.highlight pre .css .hexcolor,
+  .codeblock .tomorrow-aqua,
+  .codeblock pre .css .hexcolor {
+    color: #3e999f; }
+  figure.highlight .tomorrow-blue, figure.highlight pre .function, figure.highlight pre .python .decorator, figure.highlight pre .python .title, figure.highlight pre .ruby .function .title, figure.highlight pre .ruby .title .keyword, figure.highlight pre .perl .sub, figure.highlight pre .javascript .title, figure.highlight pre .coffeescript .title,
+  .codeblock .tomorrow-blue,
+  .codeblock pre .function,
+  .codeblock pre .python .decorator,
+  .codeblock pre .python .title,
+  .codeblock pre .ruby .function .title,
+  .codeblock pre .ruby .title .keyword,
+  .codeblock pre .perl .sub,
+  .codeblock pre .javascript .title,
+  .codeblock pre .coffeescript .title {
+    color: #4271ae; }
+  figure.highlight .tomorrow-purple, figure.highlight pre .keyword, figure.highlight pre .javascript .function,
+  .codeblock .tomorrow-purple,
+  .codeblock pre .keyword,
+  .codeblock pre .javascript .function {
+    color: #8959a8; }
+  figure.highlight pre code,
+  .codeblock pre code {
+    display: block;
+    background: white;
+    color: #4d4d4c;
+    font-family: Menlo, Monaco, Consolas, monospace;
+    line-height: 1.5;
+    border: 1px solid #ccc;
+    padding: 10px; }
