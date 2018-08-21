@@ -6,22 +6,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="JSLee&#39;s Blog">
-    <title>all-archives - JSLee&#39;s Blog</title>
+    <title>Tag: Tutorial - JSLee&#39;s Blog</title>
     <meta name="author" content="JSLee">
     
     
         <link rel="icon" href="https://j-s-lee.github.io/assets/images/favicons/favicon.ico">
     
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"Website","@id":"https://j-s-lee.github.io","author":{"@type":"Person","name":"JSLee","sameAs":[],"image":"scooter.jpeg"},"name":"JSLee's Blog","description":null,"url":"https://j-s-lee.github.io"}</script>
+    <script type="application/ld+json">{}</script>
     <meta property="og:type" content="blog">
-<meta property="og:title" content="all-archives">
-<meta property="og:url" content="https://j-s-lee.github.io/all-archives/index.html">
+<meta property="og:title" content="JSLee&#39;s Blog">
+<meta property="og:url" content="https://j-s-lee.github.io/tags/Tutorial/index.html">
 <meta property="og:site_name" content="JSLee&#39;s Blog">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-08-14T00:35:41.594Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="all-archives">
+<meta name="twitter:title" content="JSLee&#39;s Blog">
     
     
         
@@ -174,68 +173,68 @@
                         hasCoverMetaIn
                         ">
                 
-<div id="archives" class="main-content-wrap">
-    <form id="filter-form" action="#">
-        <input name="date" type="text" class="form-control input--xlarge" placeholder="Search date (YYYY/MM/DD)" autofocus="autofocus">
-    </form>
-    <h5 class="archive-result text-color-base text-xlarge"
-        data-message-zero="no post found"
-        data-message-one="1 post found"
-        data-message-other="{n} posts found"></h5>
-    <section class="boxes">
+    <section class="postShorten-group main-content-wrap">
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-right">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a class="link-unstyled" href="/2018/08/21/hyperledger-developer-tutorial/">
+                            Hyperledger Developer Tutorial
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2018-08-21T11:13:17+09:00">
+	
+		    Aug 21, 2018
+    	
+    </time>
+    
+        <span>in </span>
         
-            
-            
-            
-                
-                
-                <div class="archive archive-year box" data-date="2018">
-                    <h4 class="archive-title">
-                        <a class="link-unstyled" href="/archives/2018">2018</a>
-                    </h4>
-            
-            
-                
-                <ul class="archive-posts archive-month" data-date="201808">
-                    <h5 class="archive-title">
-                        <a class="link-unstyled" href="/archives/2018/08">August</a>
-                    </h5>
-                
-            
-            <li class="archive-post archive-day" data-date="20180821">
-                <a class="archive-post-title" href="/2018/08/21/hyperledger-developer-tutorial/">Hyperledger Developer Tutorial</a>
-                <span class="archive-post-date"> - aug 21, 2018</span>
-            </li>
-        
-            
-            
-            
-            
-            <li class="archive-post archive-day" data-date="20180817">
-                <a class="archive-post-title" href="/2018/08/17/hyperledger-error-log2/">Docker &amp; Docker Compose 버전 업그레이드</a>
-                <span class="archive-post-date"> - aug 17, 2018</span>
-            </li>
-        
-            
-            
-            
-            
-            <li class="archive-post archive-day" data-date="20180817">
-                <a class="archive-post-title" href="/2018/08/17/hyperledger-devtools-installing-error-log/">NPM global install error with Yeoman</a>
-                <span class="archive-post-date"> - aug 17, 2018</span>
-            </li>
-        
-            
-            
-            
-            
-            <li class="archive-post archive-day" data-date="20180811">
-                <a class="archive-post-title" href="/2018/08/11/getting-started-hyperledger-with-windows10-wsl/">Hyperledger 개발 환경 구축하기</a>
-                <span class="archive-post-date"> - aug 11, 2018</span>
-            </li>
-        
-    </section>
+    <a class="category-link" href="/categories/Note/">Note</a>
+
+
+    
 </div>
+
+            </div>
+            
+                <div class="postShorten-excerpt">
+                    <p>Hyperledger Composer 개발 환경 셋업이 끝난 후 간단한 튜토리얼을 진행해 보았다.</p>
+<ul>
+<li>튜토리얼 가이드 :  <a href="https://hyperledger.github.io/composer/latest/tutorials/developer-tutorial.html" target="_blank" rel="noopener">Developer tutorial for creating a Hyperledger Composer solution</a> </li>
+</ul>
+<!--toc-->
+<h2 id="0-Prerequisites"><a href="#0-Prerequisites" class="headerlink" title="0. Prerequisites"></a>0. Prerequisites</h2><p>이 튜토리얼은 <a href="https://hyperledger.github.io/composer/latest/installing/development-tools.html" target="_blank" rel="noopener">개발 환경 설치</a>가 완료된 후 진행하였으며, 에디터는 VSCode를 사용했다.  </p>
+<h2 id="1-Skeleton-Business-Network-생성"><a href="#1-Skeleton-Business-Network-생성" class="headerlink" title="1. Skeleton Business Network 생성"></a>1. Skeleton Business Network 생성</h2><p>앞서 설치한 Yeoman generator를 이용해 스켈레톤 비즈니스 네트워크를 생성한다. Yeoman을 이용하면 비즈니스 네트워크에 필요한 컴포넌트들을 포함한 디렉토리를 생성해준다.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yo hyperledger-composer:businessnetwork</span><br></pre></td></tr></table></figure>
+                    
+                        <a href="/2018/08/21/hyperledger-developer-tutorial/" class="postShorten-excerpt_link link">
+                            Continue reading
+                        </a>
+                        
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    <div class="pagination-bar">
+    <ul class="pagination">
+        
+        
+        <li class="pagination-number">page 1 of 1</li>
+    </ul>
+</div>
+
+</section>
+
 
                 <footer id="footer" class="main-content-wrap">
     <span class="copyrights">
