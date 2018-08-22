@@ -8,20 +8,8 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Wed, 22 Aug 2018 11:48:52 GMT</pubDate>
+    <pubDate>Tue, 21 Aug 2018 03:23:32 GMT</pubDate>
     <generator>http://hexo.io/</generator>
-    
-    <item>
-      <title>Product Auction Network With Events</title>
-      <link>https://j-s-lee.github.io/2018/08/22/product-auction-network/</link>
-      <guid>https://j-s-lee.github.io/2018/08/22/product-auction-network/</guid>
-      <pubDate>Wed, 22 Aug 2018 05:24:03 GMT</pubDate>
-      <description>
-      
-      </description>
-      
-      <comments>https://j-s-lee.github.io/2018/08/22/product-auction-network/#disqus_thread</comments>
-    </item>
     
     <item>
       <title>Hyperledger Developer Tutorial</title>

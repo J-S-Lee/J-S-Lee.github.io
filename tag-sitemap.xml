@@ -23,22 +23,15 @@
     </url>
 
     <url>
-        <loc>https://j-s-lee.github.io/tags/Tutorial/</loc>
+        <loc>https://j-s-lee.github.io/tags/Hyperledger/</loc>
         <lastmod>2018-08-21T03:23:32.322Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>https://j-s-lee.github.io/tags/Hyperledger/</loc>
-        <lastmod>2018-08-22T11:48:52.801Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>https://j-s-lee.github.io/tags/Composer/</loc>
-        <lastmod>2018-08-22T11:48:52.801Z</lastmod>
+        <loc>https://j-s-lee.github.io/tags/Tutorial/</loc>
+        <lastmod>2018-08-21T03:23:32.322Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
