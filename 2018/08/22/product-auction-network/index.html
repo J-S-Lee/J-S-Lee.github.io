@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="JSLee&#39;s Blog">
-    <title>Docker &amp; Docker Compose 버전 업그레이드 - JSLee&#39;s Blog</title>
+    <title>Product Auction Network With Events - JSLee&#39;s Blog</title>
     <meta name="author" content="JSLee">
     
     
@@ -15,19 +15,16 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/rss2.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"JSLee","sameAs":[],"image":"scooter.jpeg"},"articleBody":"Hyperledger Composer Installing 가이드의 절차에 따라 Hyperledger Fabric을 설치한 후 ./startFabric.sh 스크립트를 실행하면 No such command: down 오류가 발생하는 경우가 있다.\n docker와 docker-compose 의 버전 문제였는데.. Hyperledger Composer &amp; Fabric 설치에 필요한 사전 요구사항에 표기된 버전을 참고하여 설치되어 있는 버전이 낮을 경우 업그레이드 해줘야 한다.\n\n검색해 보니  docker-compose의 경우 설치된 docker 버전에 따라 설치 가능한 latest 버전에 제한이 있는 것 같다.\n$ docker -v , $ docker-compose -v 명령을 통해 각각의 버전을 확인 후 최신 버전으로 업그레이드가 필요한 경우 다음의 커맨드를 이용하여 업그레이드가 가능하다.\n\ndocker upgrade\n\n12$ sudo apt-get update$ sudo apt-get upgrade\n\ndocker-compose upgrade\n\n12$ sudo apt-get -y install python-pip$ sudo pip install --upgrade pip setuptools docker-compose\n업그레이드 이후 다시 ./startFabric.sh 스크립트를 실행 시키고  docker ps 를 통해 컨테이너 상태를 확인 할 수 있었다.  \n","dateCreated":"2018-08-17T16:21:04+09:00","dateModified":"2018-08-20T15:27:56+09:00","datePublished":"2018-08-17T16:21:04+09:00","description":"Hyperledger Composer Installing 가이드의 절차에 따라 Hyperledger Fabric을 설치한 후 ./startFabric.sh 스크립트를 실행하면 No such command: down 오류가 발생하는 경우가 있다.\n docker와 docker-compose 의 버전 문제였는데.. Hyperledger Composer &amp; Fabric 설치에 필요한 사전 요구사항에 표기된 버전을 참고하여 설치되어 있는 버전이 낮을 경우 업그레이드 해줘야 한다.","headline":"Docker & Docker Compose 버전 업그레이드","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/"},"publisher":{"@type":"Organization","name":"JSLee","sameAs":[],"image":"scooter.jpeg","logo":{"@type":"ImageObject","url":"scooter.jpeg"}},"url":"https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/","keywords":"Hyperledger"}</script>
-    <meta name="description" content="Hyperledger Composer Installing 가이드의 절차에 따라 Hyperledger Fabric을 설치한 후 ./startFabric.sh 스크립트를 실행하면 No such command: down 오류가 발생하는 경우가 있다.  docker와 docker-compose 의 버전 문제였는데.. Hyperledger Composer &amp;amp;">
-<meta name="keywords" content="Hyperledger">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"JSLee","sameAs":[],"image":"scooter.jpeg"},"articleBody":"","dateCreated":"2018-08-22T14:24:03+09:00","dateModified":"2018-08-22T20:48:52+09:00","datePublished":"2018-08-22T14:24:03+09:00","description":"","headline":"Product Auction Network With Events","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://j-s-lee.github.io/2018/08/22/product-auction-network/"},"publisher":{"@type":"Organization","name":"JSLee","sameAs":[],"image":"scooter.jpeg","logo":{"@type":"ImageObject","url":"scooter.jpeg"}},"url":"https://j-s-lee.github.io/2018/08/22/product-auction-network/","keywords":"Hyperledger, Composer"}</script>
+    <meta name="keywords" content="Hyperledger,Composer">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="Docker &amp; Docker Compose 버전 업그레이드">
-<meta property="og:url" content="https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/index.html">
+<meta property="og:title" content="Product Auction Network With Events">
+<meta property="og:url" content="https://j-s-lee.github.io/2018/08/22/product-auction-network/index.html">
 <meta property="og:site_name" content="JSLee&#39;s Blog">
-<meta property="og:description" content="Hyperledger Composer Installing 가이드의 절차에 따라 Hyperledger Fabric을 설치한 후 ./startFabric.sh 스크립트를 실행하면 No such command: down 오류가 발생하는 경우가 있다.  docker와 docker-compose 의 버전 문제였는데.. Hyperledger Composer &amp;amp;">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-08-20T06:27:56.521Z">
+<meta property="og:updated_time" content="2018-08-22T11:48:52.801Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Docker &amp; Docker Compose 버전 업그레이드">
-<meta name="twitter:description" content="Hyperledger Composer Installing 가이드의 절차에 따라 Hyperledger Fabric을 설치한 후 ./startFabric.sh 스크립트를 실행하면 No such command: down 오류가 발생하는 경우가 있다.  docker와 docker-compose 의 버전 문제였는데.. Hyperledger Composer &amp;amp;">
+<meta name="twitter:title" content="Product Auction Network With Events">
     
     
         
@@ -39,7 +36,7 @@
     
     
     <!--AUTO CANONICAL-->
-    <link rel="canonical" href="https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/"/>
+    <link rel="canonical" href="https://j-s-lee.github.io/2018/08/22/product-auction-network/"/>
     <!--STYLES-->
     <link rel="stylesheet" href="/assets/css/all.css">
     <link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
@@ -188,14 +185,14 @@
         <div class="post-header main-content-wrap text-left">
     
         <h1 class="post-title">
-            Docker &amp; Docker Compose 버전 업그레이드
+            Product Auction Network With Events
         </h1>
     
     
         <div class="post-meta">
-    <time datetime="2018-08-17T16:21:04+09:00">
+    <time datetime="2018-08-22T14:24:03+09:00">
 	
-		    Aug 17, 2018
+		    Aug 22, 2018
     	
     </time>
     
@@ -213,21 +210,7 @@
     
     <div class="post-content markdown">
         <div class="main-content-wrap">
-            <p><a href="https://hyperledger.github.io/composer/latest/installing/development-tools.html" target="_blank" rel="noopener">Hyperledger Composer Installing 가이드</a>의 절차에 따라 Hyperledger Fabric을 설치한 후 <code>./startFabric.sh</code> 스크립트를 실행하면 <code>No such command: down</code> 오류가 발생하는 경우가 있다.</p>
-<p> <code>docker</code>와 <code>docker-compose</code> 의 버전 문제였는데.. <a href="https://j-s-lee.github.io/2018/08/11/getting-started-hyperledger-with-windows10-wsl/">Hyperledger Composer &amp; Fabric 설치에 필요한 사전 요구사항</a>에 표기된 버전을 참고하여 설치되어 있는 버전이 낮을 경우 업그레이드 해줘야 한다.</p>
-<a id="more"></a>
-<p>검색해 보니  <code>docker-compose</code>의 경우 설치된 <code>docker</code> 버전에 따라 설치 가능한 latest 버전에 제한이 있는 것 같다.</p>
-<p><code>$ docker -v</code> , <code>$ docker-compose -v</code> 명령을 통해 각각의 버전을 확인 후 최신 버전으로 업그레이드가 필요한 경우 다음의 커맨드를 이용하여 업그레이드가 가능하다.</p>
-<ul>
-<li>docker upgrade</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get update</span><br><span class="line">$ sudo apt-get upgrade</span><br></pre></td></tr></table></figure>
-<ul>
-<li>docker-compose upgrade</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get -y install python-pip</span><br><span class="line">$ sudo pip install --upgrade pip setuptools docker-compose</span><br></pre></td></tr></table></figure>
-<p>업그레이드 이후 다시 <code>./startFabric.sh</code> 스크립트를 실행 시키고  <code>docker ps</code> 를 통해 컨테이너 상태를 확인 할 수 있었다.  </p>
-
+            
             
 
         </div>
@@ -237,7 +220,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">TAGGED IN</span><br/>
                 
-    <a class="tag tag--primary tag--small t-link" href="/tags/Hyperledger/">Hyperledger</a>
+    <a class="tag tag--primary tag--small t-link" href="/tags/Composer/">Composer</a> <a class="tag tag--primary tag--small t-link" href="/tags/Hyperledger/">Hyperledger</a>
 
             </div>
         
@@ -247,8 +230,7 @@
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/08/21/hyperledger-developer-tutorial/" data-tooltip="Hyperledger Developer Tutorial" aria-label="PREVIOUS: Hyperledger Developer Tutorial">
+                    <a class="post-action-btn btn btn--disabled">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
@@ -257,7 +239,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/08/17/hyperledger-devtools-installing-error-log/" data-tooltip="NPM global install error with Yeoman" aria-label="NEXT: NPM global install error with Yeoman">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/08/21/hyperledger-developer-tutorial/" data-tooltip="Hyperledger Developer Tutorial" aria-label="NEXT: Hyperledger Developer Tutorial">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -275,7 +257,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/" title="Share on Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://j-s-lee.github.io/2018/08/22/product-auction-network/" title="Share on Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -283,7 +265,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/" title="Share on Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://j-s-lee.github.io/2018/08/22/product-auction-network/" title="Share on Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -291,7 +273,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/" title="Share on Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://j-s-lee.github.io/2018/08/22/product-auction-network/" title="Share on Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -343,8 +325,7 @@
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/08/21/hyperledger-developer-tutorial/" data-tooltip="Hyperledger Developer Tutorial" aria-label="PREVIOUS: Hyperledger Developer Tutorial">
+                    <a class="post-action-btn btn btn--disabled">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
@@ -353,7 +334,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/08/17/hyperledger-devtools-installing-error-log/" data-tooltip="NPM global install error with Yeoman" aria-label="NEXT: NPM global install error with Yeoman">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/08/21/hyperledger-developer-tutorial/" data-tooltip="Hyperledger Developer Tutorial" aria-label="NEXT: Hyperledger Developer Tutorial">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -371,7 +352,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/" title="Share on Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://j-s-lee.github.io/2018/08/22/product-auction-network/" title="Share on Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -379,7 +360,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/" title="Share on Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://j-s-lee.github.io/2018/08/22/product-auction-network/" title="Share on Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -387,7 +368,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/" title="Share on Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://j-s-lee.github.io/2018/08/22/product-auction-network/" title="Share on Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -420,7 +401,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://j-s-lee.github.io/2018/08/22/product-auction-network/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
                 </a>
             </li>
@@ -428,7 +409,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://j-s-lee.github.io/2018/08/22/product-auction-network/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
                 </a>
             </li>
@@ -436,7 +417,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://j-s-lee.github.io/2018/08/22/product-auction-network/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
                 </a>
             </li>
@@ -496,9 +477,9 @@
     
         <script>
              var disqus_config = function () {
-                 this.page.url = 'https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/';
+                 this.page.url = 'https://j-s-lee.github.io/2018/08/22/product-auction-network/';
                  
-                    this.page.identifier = '2018/08/17/hyperledger-error-log2/';
+                    this.page.identifier = '2018/08/22/product-auction-network/';
                  
              };
             (function() {
