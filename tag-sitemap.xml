@@ -16,13 +16,6 @@
     </url>
 
     <url>
-        <loc>https://j-s-lee.github.io/tags/Windows/</loc>
-        <lastmod>2018-08-20T06:29:20.456Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>https://j-s-lee.github.io/tags/Tutorial/</loc>
         <lastmod>2018-08-21T03:23:32.322Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -30,15 +23,22 @@
     </url>
 
     <url>
-        <loc>https://j-s-lee.github.io/tags/Hyperledger/</loc>
+        <loc>https://j-s-lee.github.io/tags/Composer/</loc>
         <lastmod>2018-08-22T11:52:54.075Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>https://j-s-lee.github.io/tags/Composer/</loc>
-        <lastmod>2018-08-22T11:52:54.075Z</lastmod>
+        <loc>https://j-s-lee.github.io/tags/Hyperledger/</loc>
+        <lastmod>2018-08-23T05:37:55.071Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://j-s-lee.github.io/tags/Windows/</loc>
+        <lastmod>2018-08-23T05:37:55.071Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
