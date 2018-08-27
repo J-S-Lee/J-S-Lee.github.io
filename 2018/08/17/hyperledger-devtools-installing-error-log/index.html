@@ -15,7 +15,7 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/rss2.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"JSLee","sameAs":[],"image":"scooter.jpeg"},"articleBody":"Hyperledger composer 개발 환경 설정 중 발생한 에러들 정리\n\nYeoman 설치1$ npm install -g yo\n1. global installation을 위한 NPM default directory 생성우선 Permission 문제에 대한 문서 NPM docs - getting-started - fixing-npm-permissions 를 참고하여 npm의 Default Directory를 수정한다.\n\nglobal installation을 위한 디렉토리 생성\n\n1$ mkdir ~/.npm-global\n\n디렉토리 경로를 npm config에  세팅\n\n12$ npm config set prefix '~/.npm-global'$ npm config get prefix # config prefix 세팅이 잘 되었는지 확인\n\n환경변수 설정\n\n1$ vi ~/.profile # .profile 수정(사용하는 에디터에 따라 명령어가 다를 수 있다)\n1$ export PATH=~/.npm-global/bin:$PATH # 위에서 생성한 npm global install을 위한 dir경로\n.profile 수정 후에는 변경사항을 적용시켜야 한다.\n1$ source ~/.profile\n2. 디렉토리 권한 수정1번의 과정을 거친 후에도 다시 npm install -g yo 실행 시 아래와 같은 오류 발생\n오류 내용이 길어서 전체 내용 확인이 필요한 경우 에러 내용에 명시된 로그파일 /home/hyper/.npm/_logs/2018-08-17T02_14_30_188Z-debug.log을 통해 확인할 수 있다.\n\n에러 로그\n\n1234567891011121314151617181920212223npm WARN checkPermissions Missing write access to /home/hyper/.npm-global/lib/node_modules/yonpm WARN checkPermissions Missing write access to /home/hyper/.npm-global/lib/node_modules/yo/node_modulesnpm ERR! path /home/hyper/.npm-global/lib/node_modules/yonpm ERR! code EACCESnpm ERR! errno -13npm ERR! syscall accessnpm ERR! Error: EACCES: permission denied, access '/home/hyper/.npm-global/lib/node_modules/yo'npm ERR!  &#123; Error: EACCES: permission denied, access '/home/hyper/.npm-global/lib/node_modules/yo'npm ERR!   stack: 'Error: EACCES: permission denied, access \\'/home/hyper/.npm-global/lib/node_modules/yo\\'',npm ERR!   errno: -13,npm ERR!   code: 'EACCES',npm ERR!   syscall: 'access',npm ERR!   path: '/home/hyper/.npm-global/lib/node_modules/yo' &#125;npm ERR!npm ERR! The operation was rejected by your operating system.npm ERR! It is likely you do not have the permissions to access this file as the current usernpm ERR!npm ERR! If you believe this might be a permissions issue, please double-check thenpm ERR! permissions of the file and its containing directories, or try runningnpm ERR! the command again as root/Administrator (though this is not recommended).npm ERR! A complete log of this run can be found in:npm ERR!     /home/hyper/.npm/_logs/2018-08-17T02_14_30_188Z-debug.log\n\n에러 로그에 명시된 access 오류가 발생하는 디렉토리 권한 수정\n\n123$ sudo chown -R hyper /home/hyper/.npm-global$ npm cache clean -fnpm WARN using --force I sure hope you know what you are doing.\n\nYeoman 설치\n\n12345678910111213141516171819202122$ npm install -g yo/home/hyper/.npm-global/bin/yo -&gt; /home/hyper/.npm-global/lib/node_modules/yo/lib/cli.js/home/hyper/.npm-global/bin/yo-complete -&gt; /home/hyper/.npm-global/lib/node_modules/yo/lib/completion/index.js&gt; yo@2.0.5 postinstall /home/hyper/.npm-global/lib/node_modules/yo&gt; yodoctorYeoman DoctorRunning sanity checks on your system✔ Global configuration file is valid✔ NODE_PATH matches the npm root✔ Node.js version✔ No .bowerrc file in home directory✔ No .yo-rc.json file in home directory✔ npm version✔ yo versionEverything looks all right!+ yo@2.0.5removed 1 package and updated 6 packages in 27.231shyper@DESKTOP-BOKQP6N:~$\n","dateCreated":"2018-08-17T11:16:57+09:00","dateModified":"2018-08-20T15:28:23+09:00","datePublished":"2018-08-17T11:16:57+09:00","description":"Hyperledger composer 개발 환경 설정 중 발생한 에러들 정리","headline":"NPM global install error with Yeoman","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://j-s-lee.github.io/2018/08/17/hyperledger-devtools-installing-error-log/"},"publisher":{"@type":"Organization","name":"JSLee","sameAs":[],"image":"scooter.jpeg","logo":{"@type":"ImageObject","url":"scooter.jpeg"}},"url":"https://j-s-lee.github.io/2018/08/17/hyperledger-devtools-installing-error-log/","keywords":"Hyperledger, Yeoman, NPM"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"JSLee","sameAs":[],"image":"profile.jpg"},"articleBody":"Hyperledger composer 개발 환경 설정 중 발생한 에러들 정리\n\nYeoman 설치1$ npm install -g yo\n1. global installation을 위한 NPM default directory 생성우선 Permission 문제에 대한 문서 NPM docs - getting-started - fixing-npm-permissions 를 참고하여 npm의 Default Directory를 수정한다.\n\nglobal installation을 위한 디렉토리 생성\n\n1$ mkdir ~/.npm-global\n\n디렉토리 경로를 npm config에  세팅\n\n12$ npm config set prefix '~/.npm-global'$ npm config get prefix # config prefix 세팅이 잘 되었는지 확인\n\n환경변수 설정\n\n1$ vi ~/.profile # .profile 수정(사용하는 에디터에 따라 명령어가 다를 수 있다)\n1$ export PATH=~/.npm-global/bin:$PATH # 위에서 생성한 npm global install을 위한 dir경로\n.profile 수정 후에는 변경사항을 적용시켜야 한다.\n1$ source ~/.profile\n2. 디렉토리 권한 수정1번의 과정을 거친 후에도 다시 npm install -g yo 실행 시 아래와 같은 오류 발생\n오류 내용이 길어서 전체 내용 확인이 필요한 경우 에러 내용에 명시된 로그파일 /home/hyper/.npm/_logs/2018-08-17T02_14_30_188Z-debug.log을 통해 확인할 수 있다.\n\n에러 로그\n\n1234567891011121314151617181920212223npm WARN checkPermissions Missing write access to /home/hyper/.npm-global/lib/node_modules/yonpm WARN checkPermissions Missing write access to /home/hyper/.npm-global/lib/node_modules/yo/node_modulesnpm ERR! path /home/hyper/.npm-global/lib/node_modules/yonpm ERR! code EACCESnpm ERR! errno -13npm ERR! syscall accessnpm ERR! Error: EACCES: permission denied, access '/home/hyper/.npm-global/lib/node_modules/yo'npm ERR!  &#123; Error: EACCES: permission denied, access '/home/hyper/.npm-global/lib/node_modules/yo'npm ERR!   stack: 'Error: EACCES: permission denied, access \\'/home/hyper/.npm-global/lib/node_modules/yo\\'',npm ERR!   errno: -13,npm ERR!   code: 'EACCES',npm ERR!   syscall: 'access',npm ERR!   path: '/home/hyper/.npm-global/lib/node_modules/yo' &#125;npm ERR!npm ERR! The operation was rejected by your operating system.npm ERR! It is likely you do not have the permissions to access this file as the current usernpm ERR!npm ERR! If you believe this might be a permissions issue, please double-check thenpm ERR! permissions of the file and its containing directories, or try runningnpm ERR! the command again as root/Administrator (though this is not recommended).npm ERR! A complete log of this run can be found in:npm ERR!     /home/hyper/.npm/_logs/2018-08-17T02_14_30_188Z-debug.log\n\n에러 로그에 명시된 access 오류가 발생하는 디렉토리 권한 수정\n\n123$ sudo chown -R hyper /home/hyper/.npm-global$ npm cache clean -fnpm WARN using --force I sure hope you know what you are doing.\n\nYeoman 설치\n\n12345678910111213141516171819202122$ npm install -g yo/home/hyper/.npm-global/bin/yo -&gt; /home/hyper/.npm-global/lib/node_modules/yo/lib/cli.js/home/hyper/.npm-global/bin/yo-complete -&gt; /home/hyper/.npm-global/lib/node_modules/yo/lib/completion/index.js&gt; yo@2.0.5 postinstall /home/hyper/.npm-global/lib/node_modules/yo&gt; yodoctorYeoman DoctorRunning sanity checks on your system✔ Global configuration file is valid✔ NODE_PATH matches the npm root✔ Node.js version✔ No .bowerrc file in home directory✔ No .yo-rc.json file in home directory✔ npm version✔ yo versionEverything looks all right!+ yo@2.0.5removed 1 package and updated 6 packages in 27.231shyper@DESKTOP-BOKQP6N:~$\n","dateCreated":"2018-08-17T11:16:57+09:00","dateModified":"2018-08-20T15:28:23+09:00","datePublished":"2018-08-17T11:16:57+09:00","description":"Hyperledger composer 개발 환경 설정 중 발생한 에러들 정리","headline":"NPM global install error with Yeoman","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://j-s-lee.github.io/2018/08/17/hyperledger-devtools-installing-error-log/"},"publisher":{"@type":"Organization","name":"JSLee","sameAs":[],"image":"profile.jpg","logo":{"@type":"ImageObject","url":"profile.jpg"}},"url":"https://j-s-lee.github.io/2018/08/17/hyperledger-devtools-installing-error-log/","keywords":"Hyperledger, Yeoman, NPM"}</script>
     <meta name="description" content="Hyperledger composer 개발 환경 설정 중 발생한 에러들 정리">
 <meta name="keywords" content="Hyperledger,Yeoman,NPM">
 <meta property="og:type" content="blog">
@@ -33,7 +33,7 @@
         
     
     
-        <meta property="og:image" content="https://j-s-lee.github.io/assets/images/scooter.jpeg"/>
+        <meta property="og:image" content="https://j-s-lee.github.io/assets/images/profile.jpg"/>
     
     
     
@@ -85,7 +85,7 @@
         
             <div class="sidebar-profile">
                 <a href="/#about">
-                    <img class="sidebar-profile-picture" src="/assets/images/scooter.jpeg" alt="Author&#39;s picture"/>
+                    <img class="sidebar-profile-picture" src="/assets/images/profile.jpg" alt="Author&#39;s picture"/>
                 </a>
                 <h4 class="sidebar-profile-name">JSLee</h4>
                 
@@ -485,7 +485,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/assets/images/scooter.jpeg" alt="Author&#39;s picture"/>
+            <img id="about-card-picture" src="/assets/images/profile.jpg" alt="Author&#39;s picture"/>
         
             <h4 id="about-card-name">JSLee</h4>
         
@@ -605,8 +605,8 @@
 <li>튜토리얼 가이드 :  <a href="https://hyperledger.github.io/composer/latest/tutorials/developer-tutorial.html" target="_blank" rel="noopener">Developer tutorial for creating a Hyperledger Composer solution</a> </li>
 </ul>
 <!--toc-->
-<h2 id="0-Prerequisites"><a href="#0-Prerequisites" class="headerlink" title="0. Prerequisites"></a>0. Prerequisites</h2><p>이 튜토리얼은 <a href="https://hyperledger.github.io/composer/latest/installing/development-tools.html" target="_blank" rel="noopener">개발 환경 설치</a>가 완료된 후 진행하였으며, 에디터는 VSCode를 사용했다.  </p>
-<h2 id="1-Skeleton-Business-Network-생성"><a href="#1-Skeleton-Business-Network-생성" class="headerlink" title="1. Skeleton Business Network 생성"></a>1. Skeleton Business Network 생성</h2><p>앞서 설치한 Yeoman generator를 이용해 스켈레톤 비즈니스 네트워크를 생성한다. Yeoman을 이용하면 비즈니스 네트워크에 필요한 컴포넌트들을 포함한 디렉토리를 생성해준다.</p>
+<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><p>이 튜토리얼은 <a href="https://hyperledger.github.io/composer/latest/installing/development-tools.html" target="_blank" rel="noopener">개발 환경 설치</a>가 완료된 후 진행하였으며, 에디터는 VSCode를 사용했다.  </p>
+<h2 id="Skeleton-Business-Network-생성"><a href="#Skeleton-Business-Network-생성" class="headerlink" title="Skeleton Business Network 생성"></a>Skeleton Business Network 생성</h2><p>앞서 설치한 Yeoman generator를 이용해 스켈레톤 비즈니스 네트워크를 생성한다. Yeoman을 이용하면 비즈니스 네트워크에 필요한 컴포넌트들을 포함한 디렉토리를 생성해준다.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yo hyperledger-composer:businessnetwork</span><br></pre></td></tr></table></figure></div>
                     </div>
                     <div style="clear:both;"></div>
@@ -635,6 +635,27 @@
                     <hr>
                 </div>
                 
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="https://j-s-lee.github.io/2018/08/27/product-auction-network-with-events/">
+                            <h3 class="media-heading">Hyperledger Composer - Product Auction Network With Events</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Aug 27, 2018
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>이 글은 <a href="https://github.com/IBM/BlockchainEvents-CompositeJourney" target="_blank" rel="noopener">Hyperledger Composer Composite Journey - Part.3</a> 데모 실습을 정리한 글이다.</p>
+<p><a href="https://j-s-lee.github.io/2018/08/22/product-auction-network/">상품 경매 네트워크 데모</a> 에서 하이퍼레저 패브릭 네트워크에 비즈니스 네트워크를 배포하고, 배포된 비즈니스 네트워크에 REST API 서버를 연결하는 방법을 배웠다면,</p>
+<p>이번 과정에서는 하이퍼레저 패브릭 네트워크에서 이벤트가 발생하면, 외부 어플리케이션에서 웹소켓 이벤트 리스너를 통해 Web UI를 업데이트하는 방법을 알아보자.    </p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
             </div>
         </div>
         <div class="modal-footer">
@@ -642,7 +663,7 @@
                 data-message-zero="no post found"
                 data-message-one="1 post found"
                 data-message-other="{n} posts found">
-                5 posts found
+                6 posts found
             </p>
         </div>
     </div>

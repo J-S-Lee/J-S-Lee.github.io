@@ -15,7 +15,7 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/rss2.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"JSLee","sameAs":[],"image":"scooter.jpeg"},"articleBody":"Hyperledger Composer Composite Journey Part 2 데모 실습 내용을 정리한 글이다.\nPart 2는 하이퍼레저 컴포저를 사용하여 간단한 경매 네트워크를 실습해 보는 과정이다.\n앞선 튜토리얼과 유사하지만 판매자와 입찰자 권한을 나누고, 각 권한에 맞는 트랜잭션을 submit 할 수 있다. 판매자는 상품을 등록한 후에 경매를 시작하고, 각 입찰 참여자들은 경매 원하는 입찰가를 포함하는 트랜잭션을 발생시킨다.\n최종적으로 판매자가 경매를 종료하면 최고 입찰가를 제출한 입찰자의 잔액이 작성했던 입찰가 만큼 줄어들고 상품 소유자가 되며, 판매자는 입찰가만큼 잔액이 증가한다. 즉, 별도의 중개인이 없이 판매자와 입찰자간의 거래가 성사되는 것이다. \n\n공식 사이트에서 쿼리 튜토리얼을 보기 전에 한글로 정리된 예제를 한두개 더 보는게 내용 정리하는데 도움이 될 것 같아 검색을 하다 발견한 데모인데 이렇게 한글로 잘 설명된 가이드를 찾게 되서 다행이다!!\n\n아카이브 생성하이퍼레저 컴포저 개발 툴 설치 후 저장소를 복제한다.\n1git clone https://github.com/IBM/BlockchainSmartContractTrading-CompositeJourney.git\n 저장소에서 복제한 디렉토리로 이동 후 다음 명령을 사용하여 네트워크 아카이브(.bna)를 생성한다:\n1npm install\n명령을 실행하면 아래와 같은 결과가 나온다:\n12345678910111213141516&gt; mkdirp ./dist &amp;&amp; composer archive create --sourceType dir --sourceName . -a ./dist/product-auction.bnaCreating Business Network ArchiveLooking for package.json of Business Network Definition\tInput directory: /Users/LeeJaeSeok/demo/BlockchainSmartContractTrading-CompositeJourneyFound:\tDescription: Sample product auction network\tName: product-auction\tIdentifier: product-auction@0.0.1Written Business Network Definition Archive file to\tOutput file: ./dist/product-auction.bnaCommand succeeded\ncomposer archive create 명령을 통해 dist 폴더에 product-auction.bna 파일이 생성되었다.\n프로젝트 디렉토리 내에는 dist 폴더 외에도 test  폴더에 productAuction.js 라는 비즈니스 네트워크를 테스트 할 수 있는 스크립트가 있다.\n이 테스트 스크립트는 프로젝트 디렉토리에서 아래 명령을 통해 실행 할 수 있다:\n1npm test\n이 명령은 아래와 같이 Node.js의 테스트 프레임워크인 Mocha를 통해  현재 경로의 test/디렉토리에 있는 모든 .js파일의 테스트를 진행한다:\n1234567891011&gt; product-auction@0.0.1 test C:\\Users\\LeeJaeSeok\\demo\\BlockchainSmartContractTrading-CompositeJourney&gt; nyc mocha -t 0 test/*.js\t#org.acme.product.auction\t  √ Authorized owner should start the bidding (75ms)\t  √ Members bid for the product (199ms)\t  √ Close bid for the product (243ms)\t  \t3 passing (4s)\t\t...\n컴포저 플레이그라운드를 이용한 경매 네트워크 데모플레이그라운드를 열어 product-auction.bna 파일을 배포한다.\n이전에 플레이그라운드를 사용한 적이 있다면, 웹브라우저 콘솔에서 localStorage.clear()를 사용해 웹브라우저 로컬 저장소를 지운다.    \n참여자 생성Test 탭에서 비즈니스 네트워크를 테스트 하려면:\nPARTICIPANTS &gt; Seller 에 새 참여자를 생성한다.\n1234567&#123;    \"$class\": \"org.acme.product.auction.Seller\",    \"organisation\": \"ACME\",    \"email\": \"auction@acme.org\",    \"balance\": 100,    \"products\": []&#125;\nPARTICIPANTS &gt; Member 에는 다음의 두명의 참여자를 생성한다.\n12345678&#123;    \"$class\": \"org.acme.product.auction.Member\",    \"firstName\": \"Amy\",    \"lastName\": \"Williams\",    \"email\": \"memberA@acme.org\",    \"balance\": 1000,    \"products\": []&#125;\n12345678&#123;    \"$class\": \"org.acme.product.auction.Member\",    \"firstName\": \"Billy\",    \"lastName\": \"Thompson\",    \"email\": \"memberB@acme.org\",    \"balance\": 1000,    \"products\": []&#125;\n이제 admin 탭을 클릭하여 새로운 ID를 생성한다.    \n참고한 가이드에는 ID생성 &gt; 월렛에 추가 하는 방식으로 설명되어 있는데 컴포저나 플레이그라운드 버전이 바뀌면서 변경된 것인지 ID 생성과 함께 월렛에 추가되었다는 notification을 볼 수 있어 별도 월렛 추가 과정은 필요하지 않았다.\n  \nID 추가에는 위 화면과 같이 ID NAME과 Participant가 필요하다. 앞에서 생성한 1개의 seller 정보와 memberA, memberB의 정보를 이용하여 3개의 ID를 생성한다.\n12ID NAME : sellerParticipant : resource:org.acme.product.auction.Seller#auction@acme.org\n12ID NAME : memberAParticipant : resource:org.acme.product.auction.Member#memberA@acme.org\n12ID NAME : memberBParticipant : resource:org.acme.product.auction.Member#memberB@acme.org\n상품 등록 및 경매 시작ID 생성 후 seller를 사용하도록 선택하고 test 탭으로 이동하여 Submit Transaction을 클릭하여  AddProduct 및 StartBidding 트랜잭션을 수행한다.  \n\n\nowner에는 seller ID 생성시 입력한 participant 정보를 입력하면 된다.\n참고한 가이드에는 JSON Data에 productId는 없는데 원하는 값을 입력하거나 팝업 하단의 Generate Random Data를 클릭하면 자동으로 값이 채워진다.\n이 버튼을 이용할 경우 다음에 수행할 StartBidding 트랜잭션에 사용하기 위해 productId값을 복사해 두는 것이 좋다.  \nStartBidding 트랜잭션도 가이드에서는 listingId값에 대한 설명이 언급되지 않지만 임의의 값이 필요하다.\nJSON Data의 product 에는 위에서 복사해 둔 productId값이 사용되며, resource:org.acme.product.auction.Product#&lt;productId&gt; 의 형태로 입력하면 된다.\nreservePrice는 경매 예상가격이다.\n\nseller는 이 두 트랜잭션을 통해 상품을 경매에 등록한 것이다. Test 탭의 ProductListing에서 상품 리스트를 볼 수 있다.    \n경매 입찰이제 Member에 속하는 memberA와 memberB는 경매에 참여하기 위해 Offer 트랜잭션을 submit할 수 있다.  \n각각 ID 리스트에서 member ID 를 선택하고 Submit Transaction 버튼을 클릭하여 경매에 참여한다.\n\n테스트를 위해 아래와 같이 경매 입찰가격을 다르게 하여 memberA 와 memberB가 Offer 트랜잭션을 submit했다.\n1234567// memberA&#123;    \"$class\": \"org.acme.product.auction.Offer\",    \"bidPrice\": 50, // 경매 입찰가    \"listing\": \"resource:org.acme.product.auction.ProductListing#&lt;ListingId&gt;\", // ProductListing에서의 listingId    \"member\": \"resource:org.acme.product.auction.Member#memberA@acme.org\"&#125;\n1234567// memberB&#123;    \"$class\": \"org.acme.product.auction.Offer\",    \"bidPrice\": 100, // 경매 입찰가    \"listing\": \"resource:org.acme.product.auction.ProductListing#&lt;ListingId&gt;\", // ProductListing에서의 listingId    \"member\": \"resource:org.acme.product.auction.Member#memberB@acme.org\"&#125;\nProductListing 에서 모든 입찰 내역을 확인 할  수 있다.\noffers에는 경매에 참여한 모든 입찰자들의 입찰정보가 포함된다.\n    \n경매 종료이제 다시 seller ID를 선택하여 CloseBidding 트랜잭션을 통해 경매를 종료시킨다.\n트랜잭션 JSON Data 내용은 위의 StartBidding 트랜잭션 JSON Data 입력하는 방법을 참고하면 쉽게 작성할 수 있다.    \n경매 종료 후 ProductListing으로 이동하면 아래와 같이 상품의 판매상태가 FOR_SALE 에서 SOLD로 변경된 것을 확인할 수 있다.\n\nProduct에서 판매된 상품의 owner가 경매 최고입찰가를 제시한  memberB로 변경된 것을 확인할 수 있다.\n\nMember를 보면  memberB의 잔액(balance)이 입찰가인 100 만큼 줄어들었고 products에 구매한 상품이 추가된 것을 볼 수 있다.    \n\n","dateCreated":"2018-08-22T15:26:39+09:00","dateModified":"2018-08-22T20:52:54+09:00","datePublished":"2018-08-22T15:26:39+09:00","description":"Hyperledger Composer Composite Journey Part 2 데모 실습 내용을 정리한 글이다.\nPart 2는 하이퍼레저 컴포저를 사용하여 간단한 경매 네트워크를 실습해 보는 과정이다.\n앞선 튜토리얼과 유사하지만 판매자와 입찰자 권한을 나누고, 각 권한에 맞는 트랜잭션을 submit 할 수 있다. 판매자는 상품을 등록한 후에 경매를 시작하고, 각 입찰 참여자들은 경매 원하는 입찰가를 포함하는 트랜잭션을 발생시킨다.\n최종적으로 판매자가 경매를 종료하면 최고 입찰가를 제출한 입찰자의 잔액이 작성했던 입찰가 만큼 줄어들고 상품 소유자가 되며, 판매자는 입찰가만큼 잔액이 증가한다. 즉, 별도의 중개인이 없이 판매자와 입찰자간의 거래가 성사되는 것이다. ","headline":"Hyperledger Composer - 상품 경매 네트워크","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://j-s-lee.github.io/2018/08/22/product-auction-network/"},"publisher":{"@type":"Organization","name":"JSLee","sameAs":[],"image":"scooter.jpeg","logo":{"@type":"ImageObject","url":"scooter.jpeg"}},"url":"https://j-s-lee.github.io/2018/08/22/product-auction-network/","keywords":"Hyperledger, Composer"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"JSLee","sameAs":[],"image":"profile.jpg"},"articleBody":"Hyperledger Composer Composite Journey Part 2 데모 실습 내용을 정리한 글이다.\nPart 2는 하이퍼레저 컴포저를 사용하여 간단한 경매 네트워크를 실습해 보는 과정이다.\n앞선 튜토리얼과 유사하지만 판매자와 입찰자 권한을 나누고, 각 권한에 맞는 트랜잭션을 submit 할 수 있다. 판매자는 상품을 등록한 후에 경매를 시작하고, 각 입찰 참여자들은 경매 원하는 입찰가를 포함하는 트랜잭션을 발생시킨다.\n최종적으로 판매자가 경매를 종료하면 최고 입찰가를 제출한 입찰자의 잔액이 작성했던 입찰가 만큼 줄어들고 상품 소유자가 되며, 판매자는 입찰가만큼 잔액이 증가한다. 즉, 별도의 중개인이 없이 판매자와 입찰자간의 거래가 성사되는 것이다. \n\n공식 사이트에서 쿼리 튜토리얼을 보기 전에 한글로 정리된 예제를 한두개 더 보는게 내용 정리하는데 도움이 될 것 같아 검색을 하다 발견한 데모인데 이렇게 한글로 잘 설명된 가이드를 찾게 되서 다행이다!!\n\n아카이브 생성하이퍼레저 컴포저 개발 툴 설치 후 저장소를 복제한다.\n1git clone https://github.com/IBM/BlockchainSmartContractTrading-CompositeJourney.git\n 저장소에서 복제한 디렉토리로 이동 후 다음 명령을 사용하여 네트워크 아카이브(.bna)를 생성한다:\n1npm install\n명령을 실행하면 아래와 같은 결과가 나온다:\n12345678910111213141516&gt; mkdirp ./dist &amp;&amp; composer archive create --sourceType dir --sourceName . -a ./dist/product-auction.bnaCreating Business Network ArchiveLooking for package.json of Business Network Definition\tInput directory: /Users/LeeJaeSeok/demo/BlockchainSmartContractTrading-CompositeJourneyFound:\tDescription: Sample product auction network\tName: product-auction\tIdentifier: product-auction@0.0.1Written Business Network Definition Archive file to\tOutput file: ./dist/product-auction.bnaCommand succeeded\ncomposer archive create 명령을 통해 dist 폴더에 product-auction.bna 파일이 생성되었다.\n프로젝트 디렉토리 내에는 dist 폴더 외에도 test  폴더에 productAuction.js 라는 비즈니스 네트워크를 테스트 할 수 있는 스크립트가 있다.\n이 테스트 스크립트는 프로젝트 디렉토리에서 아래 명령을 통해 실행 할 수 있다:\n1npm test\n이 명령은 아래와 같이 Node.js의 테스트 프레임워크인 Mocha를 통해  현재 경로의 test/디렉토리에 있는 모든 .js파일의 테스트를 진행한다:\n1234567891011&gt; product-auction@0.0.1 test C:\\Users\\LeeJaeSeok\\demo\\BlockchainSmartContractTrading-CompositeJourney&gt; nyc mocha -t 0 test/*.js\t#org.acme.product.auction\t  √ Authorized owner should start the bidding (75ms)\t  √ Members bid for the product (199ms)\t  √ Close bid for the product (243ms)\t  \t3 passing (4s)\t\t...\n컴포저 플레이그라운드를 이용한 경매 네트워크 데모플레이그라운드를 열어 product-auction.bna 파일을 배포한다.\n이전에 플레이그라운드를 사용한 적이 있다면, 웹브라우저 콘솔에서 localStorage.clear()를 사용해 웹브라우저 로컬 저장소를 지운다.    \n참여자 생성Test 탭에서 비즈니스 네트워크를 테스트 하려면:\nPARTICIPANTS &gt; Seller 에 새 참여자를 생성한다.\n1234567&#123;    \"$class\": \"org.acme.product.auction.Seller\",    \"organisation\": \"ACME\",    \"email\": \"auction@acme.org\",    \"balance\": 100,    \"products\": []&#125;\nPARTICIPANTS &gt; Member 에는 다음의 두명의 참여자를 생성한다.\n12345678&#123;    \"$class\": \"org.acme.product.auction.Member\",    \"firstName\": \"Amy\",    \"lastName\": \"Williams\",    \"email\": \"memberA@acme.org\",    \"balance\": 1000,    \"products\": []&#125;\n12345678&#123;    \"$class\": \"org.acme.product.auction.Member\",    \"firstName\": \"Billy\",    \"lastName\": \"Thompson\",    \"email\": \"memberB@acme.org\",    \"balance\": 1000,    \"products\": []&#125;\n이제 admin 탭을 클릭하여 새로운 ID를 생성한다.    \n참고한 가이드에는 ID생성 &gt; 월렛에 추가 하는 방식으로 설명되어 있는데 컴포저나 플레이그라운드 버전이 바뀌면서 변경된 것인지 ID 생성과 함께 월렛에 추가되었다는 notification을 볼 수 있어 별도 월렛 추가 과정은 필요하지 않았다.\n  \nID 추가에는 위 화면과 같이 ID NAME과 Participant가 필요하다. 앞에서 생성한 1개의 seller 정보와 memberA, memberB의 정보를 이용하여 3개의 ID를 생성한다.\n12ID NAME : sellerParticipant : resource:org.acme.product.auction.Seller#auction@acme.org\n12ID NAME : memberAParticipant : resource:org.acme.product.auction.Member#memberA@acme.org\n12ID NAME : memberBParticipant : resource:org.acme.product.auction.Member#memberB@acme.org\n상품 등록 및 경매 시작ID 생성 후 seller를 사용하도록 선택하고 test 탭으로 이동하여 Submit Transaction을 클릭하여  AddProduct 및 StartBidding 트랜잭션을 수행한다.  \n\n\nowner에는 seller ID 생성시 입력한 participant 정보를 입력하면 된다.\n참고한 가이드에는 JSON Data에 productId는 없는데 원하는 값을 입력하거나 팝업 하단의 Generate Random Data를 클릭하면 자동으로 값이 채워진다.\n이 버튼을 이용할 경우 다음에 수행할 StartBidding 트랜잭션에 사용하기 위해 productId값을 복사해 두는 것이 좋다.  \nStartBidding 트랜잭션도 가이드에서는 listingId값에 대한 설명이 언급되지 않지만 임의의 값이 필요하다.\nJSON Data의 product 에는 위에서 복사해 둔 productId값이 사용되며, resource:org.acme.product.auction.Product#&lt;productId&gt; 의 형태로 입력하면 된다.\nreservePrice는 경매 예상가격이다.\n\nseller는 이 두 트랜잭션을 통해 상품을 경매에 등록한 것이다. Test 탭의 ProductListing에서 상품 리스트를 볼 수 있다.    \n경매 입찰이제 Member에 속하는 memberA와 memberB는 경매에 참여하기 위해 Offer 트랜잭션을 submit할 수 있다.  \n각각 ID 리스트에서 member ID 를 선택하고 Submit Transaction 버튼을 클릭하여 경매에 참여한다.\n\n테스트를 위해 아래와 같이 경매 입찰가격을 다르게 하여 memberA 와 memberB가 Offer 트랜잭션을 submit했다.\n1234567// memberA&#123;    \"$class\": \"org.acme.product.auction.Offer\",    \"bidPrice\": 50, // 경매 입찰가    \"listing\": \"resource:org.acme.product.auction.ProductListing#&lt;ListingId&gt;\", // ProductListing에서의 listingId    \"member\": \"resource:org.acme.product.auction.Member#memberA@acme.org\"&#125;\n1234567// memberB&#123;    \"$class\": \"org.acme.product.auction.Offer\",    \"bidPrice\": 100, // 경매 입찰가    \"listing\": \"resource:org.acme.product.auction.ProductListing#&lt;ListingId&gt;\", // ProductListing에서의 listingId    \"member\": \"resource:org.acme.product.auction.Member#memberB@acme.org\"&#125;\nProductListing 에서 모든 입찰 내역을 확인 할  수 있다.\noffers에는 경매에 참여한 모든 입찰자들의 입찰정보가 포함된다.\n    \n경매 종료이제 다시 seller ID를 선택하여 CloseBidding 트랜잭션을 통해 경매를 종료시킨다.\n트랜잭션 JSON Data 내용은 위의 StartBidding 트랜잭션 JSON Data 입력하는 방법을 참고하면 쉽게 작성할 수 있다.    \n경매 종료 후 ProductListing으로 이동하면 아래와 같이 상품의 판매상태가 FOR_SALE 에서 SOLD로 변경된 것을 확인할 수 있다.\n\nProduct에서 판매된 상품의 owner가 경매 최고입찰가를 제시한  memberB로 변경된 것을 확인할 수 있다.\n\nMember를 보면  memberB의 잔액(balance)이 입찰가인 100 만큼 줄어들었고 products에 구매한 상품이 추가된 것을 볼 수 있다.    \n\n","dateCreated":"2018-08-22T15:26:39+09:00","dateModified":"2018-08-27T17:12:15+09:00","datePublished":"2018-08-22T15:26:39+09:00","description":"Hyperledger Composer Composite Journey Part 2 데모 실습 내용을 정리한 글이다.\nPart 2는 하이퍼레저 컴포저를 사용하여 간단한 경매 네트워크를 실습해 보는 과정이다.\n앞선 튜토리얼과 유사하지만 판매자와 입찰자 권한을 나누고, 각 권한에 맞는 트랜잭션을 submit 할 수 있다. 판매자는 상품을 등록한 후에 경매를 시작하고, 각 입찰 참여자들은 경매 원하는 입찰가를 포함하는 트랜잭션을 발생시킨다.\n최종적으로 판매자가 경매를 종료하면 최고 입찰가를 제출한 입찰자의 잔액이 작성했던 입찰가 만큼 줄어들고 상품 소유자가 되며, 판매자는 입찰가만큼 잔액이 증가한다. 즉, 별도의 중개인이 없이 판매자와 입찰자간의 거래가 성사되는 것이다. ","headline":"Hyperledger Composer - 상품 경매 네트워크","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://j-s-lee.github.io/2018/08/22/product-auction-network/"},"publisher":{"@type":"Organization","name":"JSLee","sameAs":[],"image":"profile.jpg","logo":{"@type":"ImageObject","url":"profile.jpg"}},"url":"https://j-s-lee.github.io/2018/08/22/product-auction-network/","keywords":"Hyperledger, Composer"}</script>
     <meta name="description" content="Hyperledger Composer Composite Journey Part 2 데모 실습 내용을 정리한 글이다. Part 2는 하이퍼레저 컴포저를 사용하여 간단한 경매 네트워크를 실습해 보는 과정이다. 앞선 튜토리얼과 유사하지만 판매자와 입찰자 권한을 나누고, 각 권한에 맞는 트랜잭션을 submit 할 수 있다. 판매자는 상품을 등록한 후에 경매를 시작">
 <meta name="keywords" content="Hyperledger,Composer">
 <meta property="og:type" content="blog">
@@ -24,26 +24,26 @@
 <meta property="og:site_name" content="JSLee&#39;s Blog">
 <meta property="og:description" content="Hyperledger Composer Composite Journey Part 2 데모 실습 내용을 정리한 글이다. Part 2는 하이퍼레저 컴포저를 사용하여 간단한 경매 네트워크를 실습해 보는 과정이다. 앞선 튜토리얼과 유사하지만 판매자와 입찰자 권한을 나누고, 각 권한에 맞는 트랜잭션을 submit 할 수 있다. 판매자는 상품을 등록한 후에 경매를 시작">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://j-s-lee.github.io/assets/images/capture/add_seller_id.png">
-<meta property="og:image" content="https://j-s-lee.github.io/assets/images/capture/use_seller_id.png">
-<meta property="og:image" content="https://j-s-lee.github.io/assets/images/capture/addProduct.png">
-<meta property="og:image" content="https://j-s-lee.github.io/assets/images/capture/startBidding.png">
-<meta property="og:image" content="https://j-s-lee.github.io/assets/images/capture/memberA_Offer.png">
-<meta property="og:image" content="https://j-s-lee.github.io/assets/images/capture/productListing_after_offer.png">
-<meta property="og:image" content="https://j-s-lee.github.io/assets/images/capture/productListing_after_closebidding.png">
-<meta property="og:image" content="https://j-s-lee.github.io/assets/images/capture/product_owner_changed.png">
-<meta property="og:image" content="https://j-s-lee.github.io/assets/images/capture/memberB_after_bidding.png">
-<meta property="og:updated_time" content="2018-08-22T11:52:54.075Z">
+<meta property="og:image" content="https://j-s-lee.github.io/images/capture/add_seller_id.png">
+<meta property="og:image" content="https://j-s-lee.github.io/images/capture/use_seller_id.png">
+<meta property="og:image" content="https://j-s-lee.github.io/images/capture/addProduct.png">
+<meta property="og:image" content="https://j-s-lee.github.io/images/capture/startBidding.png">
+<meta property="og:image" content="https://j-s-lee.github.io/images/capture/memberA_Offer.png">
+<meta property="og:image" content="https://j-s-lee.github.io/images/capture/productListing_after_offer.png">
+<meta property="og:image" content="https://j-s-lee.github.io/images/capture/productListing_after_closebidding.png">
+<meta property="og:image" content="https://j-s-lee.github.io/images/capture/product_owner_changed.png">
+<meta property="og:image" content="https://j-s-lee.github.io/images/capture/memberB_after_bidding.png">
+<meta property="og:updated_time" content="2018-08-27T08:12:15.747Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hyperledger Composer - 상품 경매 네트워크">
 <meta name="twitter:description" content="Hyperledger Composer Composite Journey Part 2 데모 실습 내용을 정리한 글이다. Part 2는 하이퍼레저 컴포저를 사용하여 간단한 경매 네트워크를 실습해 보는 과정이다. 앞선 튜토리얼과 유사하지만 판매자와 입찰자 권한을 나누고, 각 권한에 맞는 트랜잭션을 submit 할 수 있다. 판매자는 상품을 등록한 후에 경매를 시작">
-<meta name="twitter:image" content="https://j-s-lee.github.io/assets/images/capture/add_seller_id.png">
+<meta name="twitter:image" content="https://j-s-lee.github.io/images/capture/add_seller_id.png">
     
     
         
     
     
-        <meta property="og:image" content="https://j-s-lee.github.io/assets/images/scooter.jpeg"/>
+        <meta property="og:image" content="https://j-s-lee.github.io/assets/images/profile.jpg"/>
     
     
     
@@ -95,7 +95,7 @@
         
             <div class="sidebar-profile">
                 <a href="/#about">
-                    <img class="sidebar-profile-picture" src="/assets/images/scooter.jpeg" alt="Author&#39;s picture"/>
+                    <img class="sidebar-profile-picture" src="/assets/images/profile.jpg" alt="Author&#39;s picture"/>
                 </a>
                 <h4 class="sidebar-profile-name">JSLee</h4>
                 
@@ -259,39 +259,39 @@
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"$class"</span>: <span class="string">"org.acme.product.auction.Member"</span>,</span><br><span class="line">    <span class="attr">"firstName"</span>: <span class="string">"Billy"</span>,</span><br><span class="line">    <span class="attr">"lastName"</span>: <span class="string">"Thompson"</span>,</span><br><span class="line">    <span class="attr">"email"</span>: <span class="string">"memberB@acme.org"</span>,</span><br><span class="line">    <span class="attr">"balance"</span>: <span class="number">1000</span>,</span><br><span class="line">    <span class="attr">"products"</span>: []</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>이제 <code>admin</code> 탭을 클릭하여 새로운 ID를 생성한다.    </p>
 <p>참고한 가이드에는 <code>ID생성</code> &gt; <code>월렛에 추가</code> 하는 방식으로 설명되어 있는데 컴포저나 플레이그라운드 버전이 바뀌면서 변경된 것인지 ID 생성과 함께 월렛에 추가되었다는 notification을 볼 수 있어 별도 월렛 추가 과정은 필요하지 않았다.</p>
-<p><img src="/assets/images/capture/add_seller_id.png" alt="add_seller_id">  </p>
+<p><img src="/images/capture/add_seller_id.png" alt="add_seller_id">  </p>
 <p>ID 추가에는 위 화면과 같이 <code>ID NAME</code>과 <code>Participant</code>가 필요하다. 앞에서 생성한 1개의 <code>seller</code> 정보와 <code>memberA</code>, <code>memberB</code>의 정보를 이용하여 3개의 ID를 생성한다.</p>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ID NAME : seller</span><br><span class="line">Participant : resource:org<span class="selector-class">.acme</span><span class="selector-class">.product</span><span class="selector-class">.auction</span><span class="selector-class">.Seller</span>#auction@acme.org</span><br></pre></td></tr></table></figure>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ID NAME : memberA</span><br><span class="line">Participant : resource:org<span class="selector-class">.acme</span><span class="selector-class">.product</span><span class="selector-class">.auction</span><span class="selector-class">.Member</span>#memberA@acme.org</span><br></pre></td></tr></table></figure>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ID NAME : memberB</span><br><span class="line">Participant : resource:org<span class="selector-class">.acme</span><span class="selector-class">.product</span><span class="selector-class">.auction</span><span class="selector-class">.Member</span>#memberB@acme.org</span><br></pre></td></tr></table></figure>
 <h3 id="상품-등록-및-경매-시작"><a href="#상품-등록-및-경매-시작" class="headerlink" title="상품 등록 및 경매 시작"></a>상품 등록 및 경매 시작</h3><p>ID 생성 후 <code>seller</code>를 사용하도록 선택하고 <code>test</code> 탭으로 이동하여 <code>Submit Transaction</code>을 클릭하여  <code>AddProduct</code> 및 <code>StartBidding</code> 트랜잭션을 수행한다.  </p>
-<p><img src="/assets/images/capture/use_seller_id.png" alt="use_seller_id"></p>
-<p><img src="/assets/images/capture/addProduct.png" alt="addProduct"></p>
+<p><img src="/images/capture/use_seller_id.png" alt="use_seller_id"></p>
+<p><img src="/images/capture/addProduct.png" alt="addProduct"></p>
 <p><code>owner</code>에는 <code>seller ID</code> 생성시 입력한 <code>participant</code> 정보를 입력하면 된다.</p>
 <p>참고한 가이드에는 JSON Data에 <code>productId</code>는 없는데 원하는 값을 입력하거나 팝업 하단의 <code>Generate Random Data</code>를 클릭하면 자동으로 값이 채워진다.</p>
 <p>이 버튼을 이용할 경우 다음에 수행할 <code>StartBidding</code> 트랜잭션에 사용하기 위해 <code>productId</code>값을 복사해 두는 것이 좋다.  </p>
 <p><code>StartBidding</code> 트랜잭션도 가이드에서는 <code>listingId</code>값에 대한 설명이 언급되지 않지만 임의의 값이 필요하다.</p>
 <p>JSON Data의 <code>product</code> 에는 위에서 복사해 둔 <code>productId</code>값이 사용되며, <code>resource:org.acme.product.auction.Product#&lt;productId&gt;</code> 의 형태로 입력하면 된다.</p>
 <p><code>reservePrice</code>는 경매 예상가격이다.</p>
-<p><img src="/assets/images/capture/startBidding.png" alt="startBidding"></p>
+<p><img src="/images/capture/startBidding.png" alt="startBidding"></p>
 <p><code>seller</code>는 이 두 트랜잭션을 통해 상품을 경매에 등록한 것이다. <code>Test</code> 탭의 <code>ProductListing</code>에서 상품 리스트를 볼 수 있다.    </p>
 <h3 id="경매-입찰"><a href="#경매-입찰" class="headerlink" title="경매 입찰"></a>경매 입찰</h3><p>이제 <code>Member</code>에 속하는 <code>memberA</code>와 <code>memberB</code>는 경매에 참여하기 위해 <code>Offer</code> 트랜잭션을 submit할 수 있다.  </p>
 <p>각각 ID 리스트에서 <code>member ID</code> 를 선택하고 <code>Submit Transaction</code> 버튼을 클릭하여 경매에 참여한다.</p>
-<p><img src="/assets/images/capture/memberA_Offer.png" alt="memberA_Offer"></p>
+<p><img src="/images/capture/memberA_Offer.png" alt="memberA_Offer"></p>
 <p>테스트를 위해 아래와 같이 경매 입찰가격을 다르게 하여 <code>memberA</code> 와 <code>memberB</code>가 <code>Offer</code> 트랜잭션을 submit했다.</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// memberA</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"$class"</span>: <span class="string">"org.acme.product.auction.Offer"</span>,</span><br><span class="line">    "bidPrice": 50, // 경매 입찰가</span><br><span class="line">    "listing": "resource:org.acme.product.auction.ProductListing#&lt;ListingId&gt;", // ProductListing에서의 listingId</span><br><span class="line">    "member": "resource:org.acme.product.auction.Member#memberA@acme.org"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// memberB</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"$class"</span>: <span class="string">"org.acme.product.auction.Offer"</span>,</span><br><span class="line">    "bidPrice": 100, // 경매 입찰가</span><br><span class="line">    "listing": "resource:org.acme.product.auction.ProductListing#&lt;ListingId&gt;", // ProductListing에서의 listingId</span><br><span class="line">    "member": "resource:org.acme.product.auction.Member#memberB@acme.org"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><code>ProductListing</code> 에서 모든 입찰 내역을 확인 할  수 있다.</p>
 <p><code>offers</code>에는 경매에 참여한 모든 입찰자들의 입찰정보가 포함된다.</p>
-<p><img src="/assets/images/capture/productListing_after_offer.png" alt="productListing_after_offer">    </p>
+<p><img src="/images/capture/productListing_after_offer.png" alt="productListing_after_offer">    </p>
 <h3 id="경매-종료"><a href="#경매-종료" class="headerlink" title="경매 종료"></a>경매 종료</h3><p>이제 다시 <code>seller ID</code>를 선택하여 <code>CloseBidding</code> 트랜잭션을 통해 경매를 종료시킨다.</p>
 <p>트랜잭션 JSON Data 내용은 위의 <code>StartBidding</code> 트랜잭션 JSON Data 입력하는 방법을 참고하면 쉽게 작성할 수 있다.    </p>
 <p>경매 종료 후 <code>ProductListing</code>으로 이동하면 아래와 같이 상품의 판매상태가 <code>FOR_SALE</code> 에서 <code>SOLD</code>로 변경된 것을 확인할 수 있다.</p>
-<p><img src="/assets/images/capture/productListing_after_closebidding.png" alt="productListing_after_closebidding"></p>
+<p><img src="/images/capture/productListing_after_closebidding.png" alt="productListing_after_closebidding"></p>
 <p><code>Product</code>에서 판매된 상품의 <code>owner</code>가 경매 최고입찰가를 제시한  <code>memberB</code>로 변경된 것을 확인할 수 있다.</p>
-<p><img src="/assets/images/capture/product_owner_changed.png" alt="product_owner_changed"></p>
+<p><img src="/images/capture/product_owner_changed.png" alt="product_owner_changed"></p>
 <p><code>Member</code>를 보면  <code>memberB</code>의 잔액(<code>balance</code>)이 입찰가인 <code>100</code> 만큼 줄어들었고 <code>products</code>에 구매한 상품이 추가된 것을 볼 수 있다.    </p>
-<p><img src="/assets/images/capture/memberB_after_bidding.png" alt="memberB_after_bidding"></p>
+<p><img src="/images/capture/memberB_after_bidding.png" alt="memberB_after_bidding"></p>
 
             
 
@@ -312,7 +312,8 @@
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    <a class="post-action-btn btn btn--disabled">
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/08/27/product-auction-network-with-events/" data-tooltip="Hyperledger Composer - Product Auction Network With Events" aria-label="PREVIOUS: Hyperledger Composer - Product Auction Network With Events">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
@@ -407,7 +408,8 @@
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    <a class="post-action-btn btn btn--disabled">
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/08/27/product-auction-network-with-events/" data-tooltip="Hyperledger Composer - Product Auction Network With Events" aria-label="PREVIOUS: Hyperledger Composer - Product Auction Network With Events">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
@@ -522,7 +524,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/assets/images/scooter.jpeg" alt="Author&#39;s picture"/>
+            <img id="about-card-picture" src="/assets/images/profile.jpg" alt="Author&#39;s picture"/>
         
             <h4 id="about-card-name">JSLee</h4>
         
@@ -642,8 +644,8 @@
 <li>튜토리얼 가이드 :  <a href="https://hyperledger.github.io/composer/latest/tutorials/developer-tutorial.html" target="_blank" rel="noopener">Developer tutorial for creating a Hyperledger Composer solution</a> </li>
 </ul>
 <!--toc-->
-<h2 id="0-Prerequisites"><a href="#0-Prerequisites" class="headerlink" title="0. Prerequisites"></a>0. Prerequisites</h2><p>이 튜토리얼은 <a href="https://hyperledger.github.io/composer/latest/installing/development-tools.html" target="_blank" rel="noopener">개발 환경 설치</a>가 완료된 후 진행하였으며, 에디터는 VSCode를 사용했다.  </p>
-<h2 id="1-Skeleton-Business-Network-생성"><a href="#1-Skeleton-Business-Network-생성" class="headerlink" title="1. Skeleton Business Network 생성"></a>1. Skeleton Business Network 생성</h2><p>앞서 설치한 Yeoman generator를 이용해 스켈레톤 비즈니스 네트워크를 생성한다. Yeoman을 이용하면 비즈니스 네트워크에 필요한 컴포넌트들을 포함한 디렉토리를 생성해준다.</p>
+<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><p>이 튜토리얼은 <a href="https://hyperledger.github.io/composer/latest/installing/development-tools.html" target="_blank" rel="noopener">개발 환경 설치</a>가 완료된 후 진행하였으며, 에디터는 VSCode를 사용했다.  </p>
+<h2 id="Skeleton-Business-Network-생성"><a href="#Skeleton-Business-Network-생성" class="headerlink" title="Skeleton Business Network 생성"></a>Skeleton Business Network 생성</h2><p>앞서 설치한 Yeoman generator를 이용해 스켈레톤 비즈니스 네트워크를 생성한다. Yeoman을 이용하면 비즈니스 네트워크에 필요한 컴포넌트들을 포함한 디렉토리를 생성해준다.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yo hyperledger-composer:businessnetwork</span><br></pre></td></tr></table></figure></div>
                     </div>
                     <div style="clear:both;"></div>
@@ -672,6 +674,27 @@
                     <hr>
                 </div>
                 
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="https://j-s-lee.github.io/2018/08/27/product-auction-network-with-events/">
+                            <h3 class="media-heading">Hyperledger Composer - Product Auction Network With Events</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Aug 27, 2018
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>이 글은 <a href="https://github.com/IBM/BlockchainEvents-CompositeJourney" target="_blank" rel="noopener">Hyperledger Composer Composite Journey - Part.3</a> 데모 실습을 정리한 글이다.</p>
+<p><a href="https://j-s-lee.github.io/2018/08/22/product-auction-network/">상품 경매 네트워크 데모</a> 에서 하이퍼레저 패브릭 네트워크에 비즈니스 네트워크를 배포하고, 배포된 비즈니스 네트워크에 REST API 서버를 연결하는 방법을 배웠다면,</p>
+<p>이번 과정에서는 하이퍼레저 패브릭 네트워크에서 이벤트가 발생하면, 외부 어플리케이션에서 웹소켓 이벤트 리스너를 통해 Web UI를 업데이트하는 방법을 알아보자.    </p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
             </div>
         </div>
         <div class="modal-footer">
@@ -679,7 +702,7 @@
                 data-message-zero="no post found"
                 data-message-one="1 post found"
                 data-message-other="{n} posts found">
-                5 posts found
+                6 posts found
             </p>
         </div>
     </div>

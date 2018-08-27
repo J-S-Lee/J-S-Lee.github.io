@@ -1,0 +1,746 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="JSLee&#39;s Blog">
+    <title>Hyperledger Composer - Product Auction Network With Events - JSLee&#39;s Blog</title>
+    <meta name="author" content="JSLee">
+    
+    
+        <link rel="icon" href="https://j-s-lee.github.io/assets/images/favicons/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/rss2.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"JSLee","sameAs":[],"image":"profile.jpg"},"articleBody":"이 글은 Hyperledger Composer Composite Journey - Part.3 데모 실습을 정리한 글이다.\n상품 경매 네트워크 데모 에서 하이퍼레저 패브릭 네트워크에 비즈니스 네트워크를 배포하고, 배포된 비즈니스 네트워크에 REST API 서버를 연결하는 방법을 배웠다면,\n이번 과정에서는 하이퍼레저 패브릭 네트워크에서 이벤트가 발생하면, 외부 어플리케이션에서 웹소켓 이벤트 리스너를 통해 Web UI를 업데이트하는 방법을 알아보자.    \n\n\n아카이브 생성저장소 복제:\n1git clone https://github.com/IBM/BlockchainEvents-CompositeJourney.git\n아카이브 파일(.bna) 생성:\n~/demo/BlockchainEvents-CompositeJourney/Composer1npm install\n{projectDir}/dist에 events.bna파일이 생성되었다.\n프로젝트 디렉토리에서 npm test 명령을 실행하면  test/productAuction.js에 작성된 테스트 코드로 유닛테스트가 가능하다.\n로컬 패브릭에서 실행되는 하이퍼레저 컴포저에 아카이브 배포로컬 패브릭을 시작한 뒤 events.bna 파일이 들어있는 dist 디렉토리에서 다음 명령어를 통해 비즈니스 네트워크를 설치/시작한다:\n123composer network install --card PeerAdmin@hlfv1 --archiveFile events.bnacomposer network start --networkName events --networkVersion 0.0.1 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.cardcomposer card import --file networkadmin.card\n다음 명령을 통해 네트워크가 잘 배포되었는지 확인할 수 있다:\n1composer network ping --card admin@events\n이제 프로젝트 디렉토리로 이동해서 REST API 서버를 시작한다:\n1234567➜  BlockchainEvents-CompositeJourney git:(master) ✗ composer-rest-server? Enter the name of the business network card to use: admin@events? Specify if you want namespaces in the generated REST API: never use namespaces? Specify if you want to use an API key to secure the REST API: No? Specify if you want to enable authentication for the REST API using Passport:No? Specify if you want to enable event publication over WebSockets: Yes? Specify if you want to enable TLS security for the REST API: No\n각 질문에 대해 답하면 이에 맞는 REST API 서버가 시작된다.    \n\n비즈니스 네트워크 카드 이름: admin@events\n생성된 API에서 네임스페이스 사용 여부: Never use namespaces\nAPI key 사용 여부: No\nPassport를 통한 인증 허용 여부: No\n웹소켓을 통한 이벤트 퍼블리싱 허용 여부: Yes\nTLS 보안 허용 여부: No\n\nREST API 서버가 정상적으로 시작된 경우 웹브라우저로 http://localhost:3000/explorer 로 이동하면 API를 볼 수 있다.    \n웹 UI 시작새 터미널을 열어서 프로젝트 디렉토리 내 Web 디렉토리로 이동한다.\nnpm install 를 통해 모듈 설치 후 node server.js 명령을 사용해 노드 서버를 시작한다.\nhttp://localhost:8000/seller.html, http://localhost:8000/buyer.html 에서 각각 판매자와 구매자의 이벤트에 대한 대시보드를 볼 수 있다.\n트랜잭션 submit경매 네트워크 데모 실습에서는 composer playground를 이용해 트랜잭션을 발생시켜 보았으니, 이번 실습에서는 REST API를 이용해 보겠다.\n참여자 생성참여자는 Seller 1명, Member 2명을 생성한다.\n먼저 POST /Seller를 통해 Seller를 생성한다:\n1234567&#123;  \"$class\": \"org.acme.product.auction.Seller\",  \"organisation\": \"ACME\",  \"email\": \"auction@acme.org\",  \"balance\": 100,  \"products\": []&#125;\n파라미터 부분에 Seller 생성을 위한 JSON Data를 입력하고 Try it out! 버튼을 클릭하면 아래에 API 실행 결과가 나온다.\n    \nMember 생성도 동일한 방법으로 POST /Member를 통해 생성한다.\n생성한 참여자들에게는 POST /system/identities/issue 를 통해 ID를 발급한다.\n12345&#123;  \"participant\": \"resource:org.acme.product.auction.Seller#auction@acme.org\",  \"userID\": \"seller\",  \"options\": &#123;&#125;&#125;\n    \nmemberA, memberB도 동일한 API를 통해 ID를 발급해준다.\n상품 추가POST /AddProduct를 통해 상품을 등록한다.\nPOST /AddProduct123456&#123;  \"$class\": \"org.acme.product.auction.AddProduct\",  \"productId\": \"iphone\",  \"description\": \"sample product\",  \"owner\": \"resource:org.acme.product.auction.Seller#auction@acme.org\"&#125;\n POST /StartBidding을 통해 경매를 시작한다.\nPOST /StartBidding123456&#123;  \"$class\": \"org.acme.product.auction.StartBidding\",  \"listingId\": \"sampleListingId\",  \"reservePrice\": 50,  \"product\": \"resource:org.acme.product.auction.Product#iphone\"&#125;\n경매 입찰Member는 POST /Offer를 통해 경매에 참여할 수 있다.\nmemberA POST /Offer123456&#123;  \"$class\": \"org.acme.product.auction.Offer\",  \"bidPrice\": 180,  \"listing\": \"resource:org.acme.product.auction.ProductListing#sampleListingId\",  \"member\": \"resource:org.acme.product.auction.Member#memberA@acme.org\"&#125;\nmemberB POST /Offer123456&#123;  \"$class\": \"org.acme.product.auction.Offer\",  \"bidPrice\": 300,  \"listing\": \"resource:org.acme.product.auction.ProductListing#sampleListingId\",  \"member\": \"resource:org.acme.product.auction.Member#memberB@acme.org\"&#125;    \nWeb UI를 통한 경매 현황 확인\n웹소켓을 통한 이벤트 퍼블리싱 허용 여부: Yes\n\n우리가 REST API 서버를 시작할 때 선택한 옵션 중 다음 옵션에 의해서 API 호출 시 발생하는 이벤트를 노드 서버에서 받을 수 있다.\n대시보드를 보여주는 웹 어플리케이션의 루트 디렉토리인 Web 디렉토리의 내부를 보면 Web/scripts/events.js 가 있다.\n이 스크립트는  ws://localhost:3000에 대한 이벤트 리스너가 정의되어 있고 이를 통해 이벤트가 발생할 때 Web UI를 업데이트 시켜준다.\n아래는 지금까지의 경매 현황을 보여주는 Seller와 Member의 대시보드이다.\n최소 금액 50으로 경매가 시작되고, memberA와 memberB가 입찰한 정보가 표시된다.    \n    \n    \n경매 종료 POST /StartBidding을 통해 경매를 시작하였다면, 경매 종료는 POST /CloseBidding을 이용한다.\nPOST /CloseBidding1234&#123;  \"$class\": \"org.acme.product.auction.CloseBidding\",  \"listing\": \"sampleListingId\"&#125;\n경매가 종료되면 최고금액인 300을 입찰한 memberB가 낙찰받게 되며 이 정보는 노드 서버의 이벤트 리스너에 의해 http://localhost:8000/buyer.html, http://localhost:8000/seller.html 의 UI에 자동으로 업데이트된다.    \n    \n\n","dateCreated":"2018-08-27T18:04:23+09:00","dateModified":"2018-08-27T21:28:21+09:00","datePublished":"2018-08-27T18:04:23+09:00","description":"이 글은 Hyperledger Composer Composite Journey - Part.3 데모 실습을 정리한 글이다.\n상품 경매 네트워크 데모 에서 하이퍼레저 패브릭 네트워크에 비즈니스 네트워크를 배포하고, 배포된 비즈니스 네트워크에 REST API 서버를 연결하는 방법을 배웠다면,\n이번 과정에서는 하이퍼레저 패브릭 네트워크에서 이벤트가 발생하면, 외부 어플리케이션에서 웹소켓 이벤트 리스너를 통해 Web UI를 업데이트하는 방법을 알아보자.    ","headline":"Hyperledger Composer - Product Auction Network With Events","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://j-s-lee.github.io/2018/08/27/product-auction-network-with-events/"},"publisher":{"@type":"Organization","name":"JSLee","sameAs":[],"image":"profile.jpg","logo":{"@type":"ImageObject","url":"profile.jpg"}},"url":"https://j-s-lee.github.io/2018/08/27/product-auction-network-with-events/","keywords":"Hyperledger, Composer"}</script>
+    <meta name="description" content="이 글은 Hyperledger Composer Composite Journey - Part.3 데모 실습을 정리한 글이다. 상품 경매 네트워크 데모 에서 하이퍼레저 패브릭 네트워크에 비즈니스 네트워크를 배포하고, 배포된 비즈니스 네트워크에 REST API 서버를 연결하는 방법을 배웠다면, 이번 과정에서는 하이퍼레저 패브릭 네트워크에서 이벤트가 발생하면, 외">
+<meta name="keywords" content="Hyperledger,Composer">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Hyperledger Composer - Product Auction Network With Events">
+<meta property="og:url" content="https://j-s-lee.github.io/2018/08/27/product-auction-network-with-events/index.html">
+<meta property="og:site_name" content="JSLee&#39;s Blog">
+<meta property="og:description" content="이 글은 Hyperledger Composer Composite Journey - Part.3 데모 실습을 정리한 글이다. 상품 경매 네트워크 데모 에서 하이퍼레저 패브릭 네트워크에 비즈니스 네트워크를 배포하고, 배포된 비즈니스 네트워크에 REST API 서버를 연결하는 방법을 배웠다면, 이번 과정에서는 하이퍼레저 패브릭 네트워크에서 이벤트가 발생하면, 외">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://j-s-lee.github.io/images/blockchainEvents/createSeller.png">
+<meta property="og:image" content="https://j-s-lee.github.io/images/blockchainEvents/issueID.png">
+<meta property="og:image" content="https://j-s-lee.github.io/images/blockchainEvents/buyerDashboard.png">
+<meta property="og:image" content="https://j-s-lee.github.io/images/blockchainEvents/sellerDashboard.png">
+<meta property="og:image" content="https://j-s-lee.github.io/images/blockchainEvents/buyer_ui.png">
+<meta property="og:image" content="https://j-s-lee.github.io/images/blockchainEvents/seller_ui.png">
+<meta property="og:updated_time" content="2018-08-27T12:28:21.755Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hyperledger Composer - Product Auction Network With Events">
+<meta name="twitter:description" content="이 글은 Hyperledger Composer Composite Journey - Part.3 데모 실습을 정리한 글이다. 상품 경매 네트워크 데모 에서 하이퍼레저 패브릭 네트워크에 비즈니스 네트워크를 배포하고, 배포된 비즈니스 네트워크에 REST API 서버를 연결하는 방법을 배웠다면, 이번 과정에서는 하이퍼레저 패브릭 네트워크에서 이벤트가 발생하면, 외">
+<meta name="twitter:image" content="https://j-s-lee.github.io/images/blockchainEvents/createSeller.png">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://j-s-lee.github.io/assets/images/profile.jpg"/>
+    
+    
+    
+    
+    <!--AUTO CANONICAL-->
+    <link rel="canonical" href="https://j-s-lee.github.io/2018/08/27/product-auction-network-with-events/"/>
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/all.css">
+    <link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
+    <link rel="stylesheet" href="/assets/css/thumbs.css">
+    <link rel="stylesheet" href="/assets/css/tranquilpeak.css">
+    <!--STYLES END-->
+    
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">JSLee&#39;s Blog</a>
+    </div>
+    
+        
+            <a  class="header-right-icon open-algolia-search"
+                href="#search">
+        
+        
+            <i class="fa fa-search fa-lg"></i>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/profile.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">JSLee</h4>
+                
+                    <h5 class="sidebar-profile-bio"></h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="Home"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                            title="Categories"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="Tags"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="Archives"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                            title="Search"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                            title="About"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="5"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            Hyperledger Composer - Product Auction Network With Events
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-08-27T18:04:23+09:00">
+	
+		    Aug 27, 2018
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/Note/">Note</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>이 글은 <a href="https://github.com/IBM/BlockchainEvents-CompositeJourney" target="_blank" rel="noopener">Hyperledger Composer Composite Journey - Part.3</a> 데모 실습을 정리한 글이다.</p>
+<p><a href="https://j-s-lee.github.io/2018/08/22/product-auction-network/">상품 경매 네트워크 데모</a> 에서 하이퍼레저 패브릭 네트워크에 비즈니스 네트워크를 배포하고, 배포된 비즈니스 네트워크에 REST API 서버를 연결하는 방법을 배웠다면,</p>
+<p>이번 과정에서는 하이퍼레저 패브릭 네트워크에서 이벤트가 발생하면, 외부 어플리케이션에서 웹소켓 이벤트 리스너를 통해 Web UI를 업데이트하는 방법을 알아보자.    </p>
+<a id="more"></a>
+<h1 id="table-of-contents">Table of Contents</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#아카이브-생성"><span class="toc-text">아카이브 생성</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#로컬-패브릭에서-실행되는-하이퍼레저-컴포저에-아카이브-배포"><span class="toc-text">로컬 패브릭에서 실행되는 하이퍼레저 컴포저에 아카이브 배포</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#웹-UI-시작"><span class="toc-text">웹 UI 시작</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#트랜잭션-submit"><span class="toc-text">트랜잭션 submit</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#참여자-생성"><span class="toc-text">참여자 생성</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#상품-추가"><span class="toc-text">상품 추가</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#경매-입찰"><span class="toc-text">경매 입찰</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Web-UI를-통한-경매-현황-확인"><span class="toc-text">Web UI를 통한 경매 현황 확인</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#경매-종료"><span class="toc-text">경매 종료</span></a></li></ol></li></ol></li></ol>
+<h2 id="아카이브-생성"><a href="#아카이브-생성" class="headerlink" title="아카이브 생성"></a>아카이브 생성</h2><p>저장소 복제:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/IBM/BlockchainEvents-CompositeJourney.git</span><br></pre></td></tr></table></figure>
+<p>아카이브 파일(<code>.bna</code>) 생성:</p>
+<figure class="highlight javascript"><figcaption><span>~/demo/BlockchainEvents-CompositeJourney/Composer</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure>
+<p><code>{projectDir}/dist</code>에 <code>events.bna</code>파일이 생성되었다.</p>
+<p>프로젝트 디렉토리에서 <code>npm test</code> 명령을 실행하면  <code>test/productAuction.js</code>에 작성된 테스트 코드로 유닛테스트가 가능하다.</p>
+<h2 id="로컬-패브릭에서-실행되는-하이퍼레저-컴포저에-아카이브-배포"><a href="#로컬-패브릭에서-실행되는-하이퍼레저-컴포저에-아카이브-배포" class="headerlink" title="로컬 패브릭에서 실행되는 하이퍼레저 컴포저에 아카이브 배포"></a>로컬 패브릭에서 실행되는 하이퍼레저 컴포저에 아카이브 배포</h2><p>로컬 패브릭을 시작한 뒤 <code>events.bna</code> 파일이 들어있는 <code>dist</code> 디렉토리에서 다음 명령어를 통해 비즈니스 네트워크를 설치/시작한다:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">composer network install --card PeerAdmin@hlfv1 --archiveFile events.bna</span><br><span class="line">composer network start --networkName events --networkVersion 0.0.1 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card</span><br><span class="line">composer card import --file networkadmin.card</span><br></pre></td></tr></table></figure>
+<p>다음 명령을 통해 네트워크가 잘 배포되었는지 확인할 수 있다:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer network ping --card admin@events</span><br></pre></td></tr></table></figure>
+<p>이제 프로젝트 디렉토리로 이동해서 REST API 서버를 시작한다:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">➜  BlockchainEvents-CompositeJourney git:(master) ✗ composer-rest-server</span><br><span class="line">? Enter the name of the business network card to use: admin@events</span><br><span class="line">? Specify <span class="keyword">if</span> you want namespaces <span class="keyword">in</span> the generated REST API: never use namespaces</span><br><span class="line">? Specify <span class="keyword">if</span> you want to use an API key to secure the REST API: No</span><br><span class="line">? Specify <span class="keyword">if</span> you want to <span class="built_in">enable</span> authentication <span class="keyword">for</span> the REST API using Passport:No</span><br><span class="line">? Specify <span class="keyword">if</span> you want to <span class="built_in">enable</span> event publication over WebSockets: Yes</span><br><span class="line">? Specify <span class="keyword">if</span> you want to <span class="built_in">enable</span> TLS security <span class="keyword">for</span> the REST API: No</span><br></pre></td></tr></table></figure>
+<p>각 질문에 대해 답하면 이에 맞는 REST API 서버가 시작된다.    </p>
+<ul>
+<li>비즈니스 네트워크 카드 이름: <code>admin@events</code></li>
+<li>생성된 API에서 네임스페이스 사용 여부: <code>Never use namespaces</code></li>
+<li>API key 사용 여부: <code>No</code></li>
+<li>Passport를 통한 인증 허용 여부: <code>No</code></li>
+<li>웹소켓을 통한 이벤트 퍼블리싱 허용 여부: <code>Yes</code></li>
+<li>TLS 보안 허용 여부: <code>No</code></li>
+</ul>
+<p>REST API 서버가 정상적으로 시작된 경우 웹브라우저로 <a href="http://localhost:3000/explorer" target="_blank" rel="noopener">http://localhost:3000/explorer</a> 로 이동하면 API를 볼 수 있다.    </p>
+<h2 id="웹-UI-시작"><a href="#웹-UI-시작" class="headerlink" title="웹 UI 시작"></a>웹 UI 시작</h2><p>새 터미널을 열어서 프로젝트 디렉토리 내 <code>Web</code> 디렉토리로 이동한다.</p>
+<p><code>npm install</code> 를 통해 모듈 설치 후 <code>node server.js</code> 명령을 사용해 노드 서버를 시작한다.</p>
+<p><a href="http://localhost:8000/seller.html" target="_blank" rel="noopener">http://localhost:8000/seller.html</a>, <a href="http://localhost:8000/buyer.html" target="_blank" rel="noopener">http://localhost:8000/buyer.html</a> 에서 각각 판매자와 구매자의 이벤트에 대한 대시보드를 볼 수 있다.</p>
+<h2 id="트랜잭션-submit"><a href="#트랜잭션-submit" class="headerlink" title="트랜잭션 submit"></a>트랜잭션 submit</h2><p><a href="">경매 네트워크 데모 실습</a>에서는 <code>composer playground</code>를 이용해 트랜잭션을 발생시켜 보았으니, 이번 실습에서는 REST API를 이용해 보겠다.</p>
+<h4 id="참여자-생성"><a href="#참여자-생성" class="headerlink" title="참여자 생성"></a>참여자 생성</h4><p>참여자는 <code>Seller</code> 1명, <code>Member</code> 2명을 생성한다.</p>
+<p>먼저 <code>POST /Seller</code>를 통해 <code>Seller</code>를 생성한다:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"$class"</span>: <span class="string">"org.acme.product.auction.Seller"</span>,</span><br><span class="line">  <span class="attr">"organisation"</span>: <span class="string">"ACME"</span>,</span><br><span class="line">  <span class="attr">"email"</span>: <span class="string">"auction@acme.org"</span>,</span><br><span class="line">  <span class="attr">"balance"</span>: <span class="number">100</span>,</span><br><span class="line">  <span class="attr">"products"</span>: []</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>파라미터 부분에 Seller 생성을 위한 JSON Data를 입력하고 <code>Try it out!</code> 버튼을 클릭하면 아래에 API 실행 결과가 나온다.</p>
+<p><img src="/images/blockchainEvents/createSeller.png" alt="createSeller">    </p>
+<p><code>Member</code> 생성도 동일한 방법으로 <code>POST /Member</code>를 통해 생성한다.</p>
+<p>생성한 참여자들에게는 <code>POST /system/identities/issue</code> 를 통해 ID를 발급한다.</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"participant"</span>: <span class="string">"resource:org.acme.product.auction.Seller#auction@acme.org"</span>,</span><br><span class="line">  <span class="attr">"userID"</span>: <span class="string">"seller"</span>,</span><br><span class="line">  <span class="attr">"options"</span>: &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/blockchainEvents/issueID.png" alt="issueID">    </p>
+<p><code>memberA</code>, <code>memberB</code>도 동일한 API를 통해 ID를 발급해준다.</p>
+<h4 id="상품-추가"><a href="#상품-추가" class="headerlink" title="상품 추가"></a>상품 추가</h4><p><code>POST /AddProduct</code>를 통해 상품을 등록한다.</p>
+<figure class="highlight json"><figcaption><span>POST /AddProduct</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"$class"</span>: <span class="string">"org.acme.product.auction.AddProduct"</span>,</span><br><span class="line">  <span class="attr">"productId"</span>: <span class="string">"iphone"</span>,</span><br><span class="line">  <span class="attr">"description"</span>: <span class="string">"sample product"</span>,</span><br><span class="line">  <span class="attr">"owner"</span>: <span class="string">"resource:org.acme.product.auction.Seller#auction@acme.org"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> <code>POST /StartBidding</code>을 통해 경매를 시작한다.</p>
+<figure class="highlight json"><figcaption><span>POST /StartBidding</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"$class"</span>: <span class="string">"org.acme.product.auction.StartBidding"</span>,</span><br><span class="line">  <span class="attr">"listingId"</span>: <span class="string">"sampleListingId"</span>,</span><br><span class="line">  <span class="attr">"reservePrice"</span>: <span class="number">50</span>,</span><br><span class="line">  <span class="attr">"product"</span>: <span class="string">"resource:org.acme.product.auction.Product#iphone"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="경매-입찰"><a href="#경매-입찰" class="headerlink" title="경매 입찰"></a>경매 입찰</h4><p><code>Member</code>는 <code>POST /Offer</code>를 통해 경매에 참여할 수 있다.</p>
+<figure class="highlight json"><figcaption><span>memberA POST /Offer</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"$class"</span>: <span class="string">"org.acme.product.auction.Offer"</span>,</span><br><span class="line">  <span class="attr">"bidPrice"</span>: <span class="number">180</span>,</span><br><span class="line">  <span class="attr">"listing"</span>: <span class="string">"resource:org.acme.product.auction.ProductListing#sampleListingId"</span>,</span><br><span class="line">  <span class="attr">"member"</span>: <span class="string">"resource:org.acme.product.auction.Member#memberA@acme.org"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><figcaption><span>memberB POST /Offer</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"$class"</span>: <span class="string">"org.acme.product.auction.Offer"</span>,</span><br><span class="line">  <span class="attr">"bidPrice"</span>: <span class="number">300</span>,</span><br><span class="line">  <span class="attr">"listing"</span>: <span class="string">"resource:org.acme.product.auction.ProductListing#sampleListingId"</span>,</span><br><span class="line">  <span class="attr">"member"</span>: <span class="string">"resource:org.acme.product.auction.Member#memberB@acme.org"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>    
+<h4 id="Web-UI를-통한-경매-현황-확인"><a href="#Web-UI를-통한-경매-현황-확인" class="headerlink" title="Web UI를 통한 경매 현황 확인"></a>Web UI를 통한 경매 현황 확인</h4><blockquote>
+<p>웹소켓을 통한 이벤트 퍼블리싱 허용 여부: <code>Yes</code></p>
+</blockquote>
+<p>우리가 REST API 서버를 시작할 때 선택한 옵션 중 다음 옵션에 의해서 API 호출 시 발생하는 이벤트를 노드 서버에서 받을 수 있다.</p>
+<p>대시보드를 보여주는 웹 어플리케이션의 루트 디렉토리인 <code>Web</code> 디렉토리의 내부를 보면 <code>Web/scripts/events.js</code> 가 있다.</p>
+<p>이 스크립트는  <code>ws://localhost:3000</code>에 대한 이벤트 리스너가 정의되어 있고 이를 통해 이벤트가 발생할 때 Web UI를 업데이트 시켜준다.</p>
+<p>아래는 지금까지의 경매 현황을 보여주는 <code>Seller</code>와 <code>Member</code>의 대시보드이다.</p>
+<p>최소 금액 50으로 경매가 시작되고, <code>memberA</code>와 <code>memberB</code>가 입찰한 정보가 표시된다.    </p>
+<p><img src="/images/blockchainEvents/buyerDashboard.png" alt="buyerDashboard">    </p>
+<p><img src="/images/blockchainEvents/sellerDashboard.png" alt="sellerDashboard">    </p>
+<h4 id="경매-종료"><a href="#경매-종료" class="headerlink" title="경매 종료"></a>경매 종료</h4><p> <code>POST /StartBidding</code>을 통해 경매를 시작하였다면, 경매 종료는 <code>POST /CloseBidding</code>을 이용한다.</p>
+<figure class="highlight json"><figcaption><span>POST /CloseBidding</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"$class"</span>: <span class="string">"org.acme.product.auction.CloseBidding"</span>,</span><br><span class="line">  <span class="attr">"listing"</span>: <span class="string">"sampleListingId"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>경매가 종료되면 최고금액인 300을 입찰한 <code>memberB</code>가 낙찰받게 되며 이 정보는 노드 서버의 이벤트 리스너에 의해 <a href="http://localhost:8000/buyer.html" target="_blank" rel="noopener">http://localhost:8000/buyer.html</a>, <a href="http://localhost:8000/seller.html" target="_blank" rel="noopener">http://localhost:8000/seller.html</a> 의 UI에 자동으로 업데이트된다.    </p>
+<p><img src="/images/blockchainEvents/buyer_ui.png" alt="buyer_ui">    </p>
+<p><img src="/images/blockchainEvents/seller_ui.png" alt="seller_ui"></p>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/Composer/">Composer</a> <a class="tag tag--primary tag--small t-link" href="/tags/Hyperledger/">Hyperledger</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/08/22/product-auction-network/" data-tooltip="Hyperledger Composer - 상품 경매 네트워크" aria-label="NEXT: Hyperledger Composer - 상품 경매 네트워크">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://j-s-lee.github.io/2018/08/27/product-auction-network-with-events/" title="Share on Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://j-s-lee.github.io/2018/08/27/product-auction-network-with-events/" title="Share on Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://j-s-lee.github.io/2018/08/27/product-auction-network-with-events/" title="Share on Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="Table of Contents">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 JSLee. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2018/08/22/product-auction-network/" data-tooltip="Hyperledger Composer - 상품 경매 네트워크" aria-label="NEXT: Hyperledger Composer - 상품 경매 네트워크">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="Share this post">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://j-s-lee.github.io/2018/08/27/product-auction-network-with-events/" title="Share on Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://j-s-lee.github.io/2018/08/27/product-auction-network-with-events/" title="Share on Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://j-s-lee.github.io/2018/08/27/product-auction-network-with-events/" title="Share on Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="Table of Contents">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+    <i id="btn-close-shareoptions" class="fa fa-times"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://j-s-lee.github.io/2018/08/27/product-auction-network-with-events/">
+                    <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://j-s-lee.github.io/2018/08/27/product-auction-network-with-events/">
+                    <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://j-s-lee.github.io/2018/08/27/product-auction-network-with-events/">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/profile.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">JSLee</h4>
+        
+            <div id="about-card-bio"></div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Junior</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Seoul/Korea
+            </div>
+        
+    </div>
+</div>
+
+        
+            <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-times"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="https://j-s-lee.github.io/2018/08/11/getting-started-hyperledger-with-windows10-wsl/">
+                            <h3 class="media-heading">Hyperledger 개발 환경 구축하기</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Aug 11, 2018
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>윈도우 환경에서 <code>Hyperledger Composer</code> 개발 환경 구축하는 과정을 정리하는 글</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="https://j-s-lee.github.io/2018/08/17/hyperledger-devtools-installing-error-log/">
+                            <h3 class="media-heading">NPM global install error with Yeoman</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Aug 17, 2018
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Hyperledger composer 개발 환경 설정 중 발생한 에러들 정리</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="https://j-s-lee.github.io/2018/08/17/hyperledger-error-log2/">
+                            <h3 class="media-heading">Docker &amp; Docker Compose 버전 업그레이드</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Aug 17, 2018
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p><a href="https://hyperledger.github.io/composer/latest/installing/development-tools.html" target="_blank" rel="noopener">Hyperledger Composer Installing 가이드</a>의 절차에 따라 Hyperledger Fabric을 설치한 후 <code>./startFabric.sh</code> 스크립트를 실행하면 <code>No such command: down</code> 오류가 발생하는 경우가 있다.</p>
+<p> <code>docker</code>와 <code>docker-compose</code> 의 버전 문제였는데.. <a href="https://j-s-lee.github.io/2018/08/11/getting-started-hyperledger-with-windows10-wsl/">Hyperledger Composer &amp; Fabric 설치에 필요한 사전 요구사항</a>에 표기된 버전을 참고하여 설치되어 있는 버전이 낮을 경우 업그레이드 해줘야 한다.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="https://j-s-lee.github.io/2018/08/21/hyperledger-developer-tutorial/">
+                            <h3 class="media-heading">Hyperledger Developer Tutorial</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Aug 21, 2018
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Hyperledger Composer 개발 환경 셋업이 끝난 후 간단한 튜토리얼을 진행해 보았다.</p>
+<ul>
+<li>튜토리얼 가이드 :  <a href="https://hyperledger.github.io/composer/latest/tutorials/developer-tutorial.html" target="_blank" rel="noopener">Developer tutorial for creating a Hyperledger Composer solution</a> </li>
+</ul>
+<!--toc-->
+<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><p>이 튜토리얼은 <a href="https://hyperledger.github.io/composer/latest/installing/development-tools.html" target="_blank" rel="noopener">개발 환경 설치</a>가 완료된 후 진행하였으며, 에디터는 VSCode를 사용했다.  </p>
+<h2 id="Skeleton-Business-Network-생성"><a href="#Skeleton-Business-Network-생성" class="headerlink" title="Skeleton Business Network 생성"></a>Skeleton Business Network 생성</h2><p>앞서 설치한 Yeoman generator를 이용해 스켈레톤 비즈니스 네트워크를 생성한다. Yeoman을 이용하면 비즈니스 네트워크에 필요한 컴포넌트들을 포함한 디렉토리를 생성해준다.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yo hyperledger-composer:businessnetwork</span><br></pre></td></tr></table></figure></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="https://j-s-lee.github.io/2018/08/22/product-auction-network/">
+                            <h3 class="media-heading">Hyperledger Composer - 상품 경매 네트워크</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Aug 22, 2018
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p><a href="https://github.com/IBM/BlockchainSmartContractTrading-CompositeJourney" target="_blank" rel="noopener">Hyperledger Composer Composite Journey</a> Part 2 데모 실습 내용을 정리한 글이다.</p>
+<p>Part 2는 하이퍼레저 컴포저를 사용하여 간단한 경매 네트워크를 실습해 보는 과정이다.</p>
+<p>앞선 튜토리얼과 유사하지만 판매자와 입찰자 권한을 나누고, 각 권한에 맞는 트랜잭션을 submit 할 수 있다. 판매자는 상품을 등록한 후에 경매를 시작하고, 각 입찰 참여자들은 경매 원하는 입찰가를 포함하는 트랜잭션을 발생시킨다.</p>
+<p>최종적으로 판매자가 경매를 종료하면 최고 입찰가를 제출한 입찰자의 잔액이 작성했던 입찰가 만큼 줄어들고 상품 소유자가 되며, 판매자는 입찰가만큼 잔액이 증가한다. 즉, 별도의 중개인이 없이 판매자와 입찰자간의 거래가 성사되는 것이다. </p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    
+                    <div class="media-body">
+                        <a class="link-unstyled" href="https://j-s-lee.github.io/2018/08/27/product-auction-network-with-events/">
+                            <h3 class="media-heading">Hyperledger Composer - Product Auction Network With Events</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Aug 27, 2018
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>이 글은 <a href="https://github.com/IBM/BlockchainEvents-CompositeJourney" target="_blank" rel="noopener">Hyperledger Composer Composite Journey - Part.3</a> 데모 실습을 정리한 글이다.</p>
+<p><a href="https://j-s-lee.github.io/2018/08/22/product-auction-network/">상품 경매 네트워크 데모</a> 에서 하이퍼레저 패브릭 네트워크에 비즈니스 네트워크를 배포하고, 배포된 비즈니스 네트워크에 REST API 서버를 연결하는 방법을 배웠다면,</p>
+<p>이번 과정에서는 하이퍼레저 패브릭 네트워크에서 이벤트가 발생하면, 외부 어플리케이션에서 웹소켓 이벤트 리스너를 통해 Web UI를 업데이트하는 방법을 알아보자.    </p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="no post found"
+                data-message-one="1 post found"
+                data-message-other="{n} posts found">
+                6 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/prague.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/jquery.js"></script>
+<script src="/assets/js/jquery.fancybox.js"></script>
+<script src="/assets/js/thumbs.js"></script>
+<script src="/assets/js/tranquilpeak.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://j-s-lee.github.io/2018/08/27/product-auction-network-with-events/';
+                 
+                    this.page.identifier = '2018/08/27/product-auction-network-with-events/';
+                 
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'j-s-lee';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script>
+        var algoliaClient = algoliasearch('0275PZCSP9', '1159739ebc4485c25b509263849e8420');
+        var algoliaIndex = algoliaClient.initIndex('my_hexo_blog');
+    </script>
+
+
+    </body>
+</html>

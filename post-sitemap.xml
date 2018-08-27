@@ -7,16 +7,8 @@
     </url>
 
     <url>
-        <loc>https://j-s-lee.github.io/2018/08/11/getting-started-hyperledger-with-windows10-wsl/</loc>
-        <lastmod>2018-08-23T05:37:55.071Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>https://j-s-lee.github.io/2018/08/22/product-auction-network/</loc>
-        <lastmod>2018-08-22T11:52:54.075Z</lastmod>
+        <loc>https://j-s-lee.github.io/2018/08/27/product-auction-network-with-events/</loc>
+        <lastmod>2018-08-27T12:28:21.755Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -24,7 +16,23 @@
 
     <url>
         <loc>https://j-s-lee.github.io/2018/08/21/hyperledger-developer-tutorial/</loc>
-        <lastmod>2018-08-21T03:23:32.322Z</lastmod>
+        <lastmod>2018-08-27T12:23:17.206Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://j-s-lee.github.io/2018/08/22/product-auction-network/</loc>
+        <lastmod>2018-08-27T08:12:15.747Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://j-s-lee.github.io/2018/08/11/getting-started-hyperledger-with-windows10-wsl/</loc>
+        <lastmod>2018-08-23T05:37:55.071Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
